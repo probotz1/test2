@@ -19,7 +19,7 @@ EXPOSE 8080
 # Pass environment variables
 ENV TELEGRAM_API_ID=<21740783>
 ENV TELEGRAM_API_HASH=<a5dc7fec8302615f5b441ec5e238cd46>
-ENV TELEGRAM_BOT_TOKEN=<7449731680:AAGvJjogn8jHKo385j2LC4F4wE5_X48_Hck>
+ENV TELEGRAM_BOT_TOKEN=<7496680438:AAHyEZDGnIoARpfywrzQOhB27un9pja49p4>
 
 # Run bot.py when the container launches
 CMD ["python", "bot.py", "bot"]
