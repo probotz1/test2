@@ -4,6 +4,7 @@ import subprocess
 import sys
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters
+from aiohttp import web
 from config import TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_BOT_TOKEN
 
 app = Flask(__name__)
@@ -102,8 +103,24 @@ def process_request():
 
     return jsonify({"status": "success", "output_file": output_file})
 
+async def web_server():
+    async def handle(request):
+        return web.Response(text="Hello, world")
+
+    app = web.Application()
+    app.add_routes([web.get('/', handle)])
+    return app
+
+async def start_web_server():
+    app = web.AppRunner(await web_server())
+    await app.setup()
+    bind_address = "0.0.0.0"
+    PORT = int(os.getenv('PORT', 8080))
+    await web.TCPSite(app, bind_address, PORT).start()
+
 if __name__ == "__main__":
     from argparse import ArgumentParser
+    import asyncio
 
     parser = ArgumentParser(description="Run the bot or the web server.")
     parser.add_argument('mode', choices=['bot', 'web'], help="Run mode: bot or web")
@@ -113,4 +130,11 @@ if __name__ == "__main__":
     if args.mode == 'bot':
         bot.run()
     elif args.mode == 'web':
-        app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8080)))
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(start_web_server())
+        try:
+            loop.run_forever()
+        except KeyboardInterrupt:
+            pass
+        finally:
+            loop.close()
