@@ -1,5 +1,8 @@
-# Use an official Python runtime as a parent image
+# Use an optimized Python runtime
 FROM python:3.9-slim
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y ffmpeg
 
 # Set the working directory in the container
 WORKDIR /app
@@ -10,16 +13,13 @@ COPY . /app
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Gunicorn
-RUN pip install gunicorn
-
-# Make port 8080 available to the world outside this container
-EXPOSE 8080
+# Make port 5000 available to the world outside this container
+EXPOSE 5000
 
 # Pass environment variables
-ENV TELEGRAM_API_ID=<21740783>
-ENV TELEGRAM_API_HASH=<a5dc7fec8302615f5b441ec5e238cd46>
-ENV TELEGRAM_BOT_TOKEN=<7496680438:AAHyEZDGnIoARpfywrzQOhB27un9pja49p4>
+ENV TELEGRAM_API_ID=<your_api_id>
+ENV TELEGRAM_API_HASH=<your_api_hash>
+ENV TELEGRAM_BOT_TOKEN=<your_bot_token>
 
 # Run bot.py when the container launches
 CMD ["python", "bot.py", "bot"]
