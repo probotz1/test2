@@ -12,9 +12,9 @@ class Bot(Client):
     def __init__(self):
         super().__init__(
             name="Audio-_edit_bot",
-            api_id=Config.API_ID,
-            api_hash=Config.API_HASH,
-            bot_token=Config.BOT_TOKEN,
+            API_ID=Config.API_ID,
+            API_HASH=Config.API_HASH,
+            BOT_TOKEN=Config.BOT_TOKEN,
             workers=4,
             plugins={"root": "plugins"},
             sleep_threshold=15,
