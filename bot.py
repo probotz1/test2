@@ -119,8 +119,6 @@ async def start_web_server():
     bind_address = "0.0.0.0"
     await web.TCPSite(app, bind_address, PORT).start()
 
-async def main():
-    await asyncio.gather(bot.start(), start_web_server())
-
 if __name__ == "__main__":
-    asyncio.run(main())
+
+        bot.run()
