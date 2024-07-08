@@ -7,5 +7,8 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "7496680438:AAHyEZDGnIoARpf
 #port to run web server
 PORT = int(os.getenv('PORT', "8080"))
 
+# wes response configuration     
+WEBHOOK = bool(os.environ.get("WEBHOOK", "True"))
+
 if not all([TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_BOT_TOKEN]):
     raise ValueError("Please set the TELEGRAM_API_ID, TELEGRAM_API_HASH, and TELEGRAM_BOT_TOKEN environment variables")
