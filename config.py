@@ -1,5 +1,7 @@
 import os
 
+class Config(object):
+#Audio-_edit_bot client Config 
 API_ID = os.getenv("API_ID", "21740783")
 API_HASH = os.getenv("API_HASH", "a5dc7fec8302615f5b441ec5e238cd46")
 BOT_TOKEN = os.getenv("BOT_TOKEN", "7496680438:AAHyEZDGnIoARpfywrzQOhB27un9pja49p4")
