@@ -11,6 +11,3 @@ class Config(object):
 
     # wes response configuration     
     WEBHOOK = bool(os.environ.get("WEBHOOK", "True"))
-
-if not all([API_ID, API_HASH, BOT_TOKEN]):
-    raise ValueError("Please set the API_ID, API_HASH, and BOT_TOKEN environment variables")
