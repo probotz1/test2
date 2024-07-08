@@ -2,7 +2,7 @@ from datetime import datetime
 from pytz import timezone
 from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
-from config import config
+from config import API_ID, API_HASH, BOT_TOKEN, WEEBHOOK
 from aiohttp import web
 from plugins import web_server
 from plugins import start
