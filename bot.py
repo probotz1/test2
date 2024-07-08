@@ -9,6 +9,8 @@ from aiohttp import web
 from plugins import web_server
 from config import TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_BOT_TOKEN, PORT
 
+PORT = "8080"
+
 app = Flask(__name__)
 
 # Telegram bot setup
@@ -103,15 +105,7 @@ def process_request():
     else:
         return jsonify({"error": "Invalid action"}), 400
 
-    return jsonify({"status": "success", "output_file": output_file})
-
-async def web_server():
-    async def handle(request):
-        return web.Response(text="Hello, world")
-
-    app = web.Application()
-    app.add_routes([web.get('/', handle)])
-    return app
+    return jsonify({"status": "success", "output_file": output_file}
 
 async def start_web_server():
     app = web.AppRunner(await web_server())
