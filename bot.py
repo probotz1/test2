@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters
@@ -118,23 +119,8 @@ async def start_web_server():
     bind_address = "0.0.0.0"
     await web.TCPSite(app, bind_address, PORT).start()
 
+async def main():
+    await asyncio.gather(bot.start(), start_web_server())
+
 if __name__ == "__main__":
-    from argparse import ArgumentParser
-    import asyncio
-
-    parser = ArgumentParser(description="Run the bot or the web server.")
-    parser.add_argument('mode', choices=['bot', 'web'], help="Run mode: bot or web")
-
-    args = parser.parse_args()
-
-    if args.mode == 'bot':
-        bot.run()
-    elif args.mode == 'web':
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(start_web_server())
-        try:
-            loop.run_forever()
-        except KeyboardInterrupt:
-            pass
-        finally:
-            loop.close()
+    asyncio.run(main())
