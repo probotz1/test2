@@ -30,6 +30,6 @@ class Bot(Client):
             app = web.AppRunner(await web_server())
             await app.setup()
             bind_address = "0.0.0.0"
-            await web.TCPSite(app, bind_address, 8080).start()
+            await web.TCPSite(app, bind_address, 8050).start()
 
 Bot().run()
