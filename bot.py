@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify
 from pyrogram import Client, filters
 from aiohttp import web
 from plugins import web_server
-from config import TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_BOT_TOKEN
+from config import TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_BOT_TOKEN, PORT
 
 app = Flask(__name__)
 
