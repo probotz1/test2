@@ -16,10 +16,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
 
-# Pass environment variables
-ENV TELEGRAM_API_ID=<your_api_id>
-ENV TELEGRAM_API_HASH=<your_api_hash>
-ENV TELEGRAM_BOT_TOKEN=<your_bot_token>
-
 # Run bot.py when the container launches
 CMD ["python", "bot.py", "bot"]
