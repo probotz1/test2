@@ -1,4 +1,4 @@
-import os
+import os, time
 
 class Config(object):
     #Audio-_edit_bot client Config 
@@ -8,6 +8,9 @@ class Config(object):
 
     #port to run web server
     PORT = int(os.getenv('PORT', "8080"))
+
+    # other configs
+    BOT_UPTIME  = time.time()
 
     # wes response configuration     
     WEBHOOK = bool(os.environ.get("WEBHOOK", "True"))
