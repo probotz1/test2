@@ -105,7 +105,7 @@ def process_request():
     else:
         return jsonify({"error": "Invalid action"}), 400
 
-    return jsonify({"status": "success", "output_file": output_file}
+    return jsonify({"status": "success", "output_file": output_file})
 
 async def start_web_server():
     app = web.AppRunner(await web_server())
