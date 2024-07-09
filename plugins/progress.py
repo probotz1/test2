@@ -1,5 +1,4 @@
 import subprocess
-import process_video, progress_bar_template
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
