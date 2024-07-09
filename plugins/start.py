@@ -2,7 +2,7 @@ import os
 import tempfile
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters
-from plugins import progress
+from progress import process_video, progress_bar_template
 
 app = Flask(__name__)
 
