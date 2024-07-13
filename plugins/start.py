@@ -6,6 +6,7 @@ import tempfile
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters
 from plugins import open
+from plugins.database import awtbotz
 from progress import progress_for_pyrogram, humanbytes, convert
 from concurrent.futures import ThreadPoolExecutor
 
