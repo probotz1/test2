@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceReply, CallbackQuery, Message, InputMediaPhoto
 
-from plugins.start import remove_audio, trim_video 
+from plugins import start
 from config import Config, Txt  
 
 @Client.on_message(filters.private & filters.command("start"))
