@@ -1,6 +1,5 @@
 import motor.motor_asyncio
 from config import Config
-from progress import send_log
 
 class Database:
 
