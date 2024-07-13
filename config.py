@@ -43,5 +43,10 @@ class Txt(object):
 <b>🚀 Speed</b> : {3}/s
 <b>⏰️ ETA</b> : {4} """
 
+        HELP_TXT = """<b>Hey</b> {}
+    
+see the command of my bot."""
+
+
 
 #This bot was created by Awt botz
