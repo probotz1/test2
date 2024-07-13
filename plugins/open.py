@@ -53,7 +53,7 @@ async def cb_handler(client, query: CallbackQuery):
                 ]])
        )
 
-   elif data == "about":
+    elif data == "about":
         await query.message.edit_text(
             text=Txt.ABOUT_TXT,
             disable_web_page_preview=True,
