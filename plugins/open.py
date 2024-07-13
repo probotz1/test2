@@ -2,12 +2,13 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceReply, CallbackQuery, Message, InputMediaPhoto
 
 from plugins import start
-from config import Config, Txt  
+from config import Config, Txt 
+from plugins.database import awtbotz
 
 @Client.on_message(filters.private & filters.command("start"))
 async def start(client, message):
     user = message.from_user
-    await start.add_user(client, message)                
+    await awtbotz.add_user(client, message)                
     button = InlineKeyboardMarkup([[
       InlineKeyboardButton('📢 Updates', url='https://t.me/Anime_Warrior_Tamil'),
       InlineKeyboardButton('💬 Support', url='https://t.me/+NITVxLchQhYzNGZl')
