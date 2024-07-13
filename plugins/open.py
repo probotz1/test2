@@ -2,7 +2,7 @@ mport random
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceReply, CallbackQuery, Message, InputMediaPhoto
 
-from plugins.start.py import 
+from plugins.start.py import run_command, remove_audio, trim_video 
 from config import Config, Txt  
 
 @Client.on_message(filters.private & filters.command("start"))
@@ -39,7 +39,22 @@ async def cb_handler(client, query: CallbackQuery):
                 ]])
         )
 
-    elif data == "about":
+    elif data == "help":
+        await query.message.edit_text(
+            text=Txt.HELP_TXT.format(client.mention),
+            disable_web_page_preview=True,
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton('👉 Owner', url='https://t.me/Anime_Warrior_Tamil')
+                ],[
+                InlineKeyboardButton('🎵 remove_audio', callback_data='remove_audio'),
+                InlineKeyboardButton('✏️ trim_video', callback_data='trim_video')
+                ],[
+                InlineKeyboardButton('🏠 Home', callback_data='home'),
+                InlineKeyboardButton('👈 Back', callback_data='home')
+                ]])
+       )
+
+   elif data == "about":
         await query.message.edit_text(
             text=Txt.ABOUT_TXT,
             disable_web_page_preview=True,
