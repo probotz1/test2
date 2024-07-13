@@ -7,7 +7,7 @@ from plugins.database import awtbotz
 
 @Client.on_message(filters.private & filters.command("start"))
 async def start(client, message):
-    message.START_TXT
+    message.reply_text("START_TXT")
     await awtbotz.add_user(client, message)                
     button = InlineKeyboardMarkup([[
       InlineKeyboardButton('📢 Updates', url='https://t.me/Anime_Warrior_Tamil'),
