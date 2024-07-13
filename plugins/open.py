@@ -1,3 +1,4 @@
+import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceReply, CallbackQuery, Message, InputMediaPhoto
 
@@ -7,7 +8,8 @@ from plugins.database import awtbotz
 
 @Client.on_message(filters.private & filters.command("start"))
 async def start(client, message):
-    message.reply_text("hi friends")                
+    user = message.from_user
+    await awtbotz.add_user(client, message)                
     button = InlineKeyboardMarkup([[
       InlineKeyboardButton('📢 Updates', url='https://t.me/Anime_Warrior_Tamil'),
       InlineKeyboardButton('💬 Support', url='https://t.me/+NITVxLchQhYzNGZl')
