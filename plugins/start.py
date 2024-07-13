@@ -22,6 +22,19 @@ def run_command(command):
     except subprocess.CalledProcessError as e:
         print(f"Error: {e}", file=sys.stderr)
         return False
+@Client.on_message(filters.command("start"))
+def start(client, message):
+    message.reply_text("Hello! Send me a video to process. Use /help to see available commands.")
+
+@Client.on_message(filters.command("help"))
+def help(client, message):
+    help_text = (
+        "Available commands:\n"
+        "/start - Start the bot\n"
+        "/remove_audio - Remove audio from a video\n"
+        "/trim_video - Trim a video\n"
+    )
+    message.reply_text(help_text)
 
 def remove_audio(input_file, output_file):
     command = ['ffmpeg', '-i', input_file, '-c', 'copy', '-an', output_file]
