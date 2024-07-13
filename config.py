@@ -37,13 +37,13 @@ class Txt(object):
     
 <b>♻️ Bot Made By :</b> @Anime_Warrior_Tamil"""
     
-        PROGRESS_BAR = """\n
+    PROGRESS_BAR = """\n
 <b>📁 Size</b> : {1} | {2}
 <b>⏳️ Done</b> : {0}%
 <b>🚀 Speed</b> : {3}/s
 <b>⏰️ ETA</b> : {4} """
 
-        HELP_TXT = """<b>Hey</b> {}
+    HELP_TXT = """<b>Hey</b> {}
     
 see the command of my bot."""
 
