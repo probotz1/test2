@@ -9,6 +9,11 @@ class Config(object):
     #port to run web server
     PORT = int(os.getenv('PORT', "8080"))
 
+    # database config
+    DB_NAME = os.environ.get("DB_NAME","Speedwolf1")     
+    DB_URL  = os.environ.get("DB_URL","mongodb+srv://Speedwolf1:speedwolf24689@cluster0.rgfywsf.mongodb.net/")
+
+
     # other configs
     BOT_UPTIME  = time.time()
 
