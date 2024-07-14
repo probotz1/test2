@@ -53,7 +53,7 @@ def handle_remove_audio(client, message):
     success = future.result()
 
     if success:
-        client.send_video(chat_id=message.chat.id, video=output_file_no_audio, progress=progress_for_pyrogram)
+        client.send_video(chat_id=message.chat.id, video=output_file_no_audio)
     else:
         message.reply_text("Failed to process the video. Please try again later.")
 
@@ -78,7 +78,7 @@ def handle_trim_video(client, message):
     success = future.result()
 
     if success:
-        client.send_video(chat_id=message.chat.id, video=output_file_trimmed, progress=progress_for_pyrogram)
+        client.send_video(chat_id=message.chat.id, video=output_file_trimmed)
     else:
         message.reply_text("Failed to process the video. Please try again later.")
 
