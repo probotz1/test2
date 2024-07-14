@@ -25,7 +25,7 @@ class Txt(object):
     
     START_TXT = """Hello Friends i am The Advance 📹Video Editor bot i have special Features like "Audio remover" and "video trimmer" 
     
-</a>\n Bot Is Made By @Anime_Warrior_Tamil</b>"""
+</a>"\n Bot Is Made By @Anime_Warrior_Tamil"</b>"""
     
     ABOUT_TXT = f"""<b>○ Creator : @speedwolf</a>\n○ Language : <code>Python3</code>\n○ Library : <a href='https://docs.pyrogram.org/'>Pyrogram asyncio</a>\n○ Channel : @Anime_Warrior_Tamil\n○ Support Group : @+NITVxLchQhYzNGZl</b>", 
     
