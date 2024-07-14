@@ -4,7 +4,7 @@ import subprocess
 import sys
 import math
 import time
-import aysncio 
+import asyncio 
 import progress 
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
