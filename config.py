@@ -27,7 +27,7 @@ class Txt(object):
     
 </a>\n Bot Is Made By @Anime_Warrior_Tamil</b>"""
     
-    ABOUT_TXT = f"""<b>○ Creator : @speedwolf</a>\n○ Language : <code>Python3</code>\n○ Library : <a href='https://docs.pyrogram.org/'>Pyrogram asyncio {__version__}>Click here</a>\n○ Channel : @Anime_Warrior_Tamil\n○ Support Group : @+NITVxLchQhYzNGZl</b>", 
+    ABOUT_TXT = f"""<b>○ Creator : @speedwolf</a>\n○ Language : <code>Python3</code>\n○ Library : <a href='https://docs.pyrogram.org/'>Pyrogram asyncio</a>\n○ Channel : @Anime_Warrior_Tamil\n○ Support Group : @+NITVxLchQhYzNGZl</b>", 
     
 <b>♻️ Bot Made By :</b> @Anime_Warrior_Tamil"""
     
