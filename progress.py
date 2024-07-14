@@ -1,4 +1,6 @@
-import time
+import time, math
+from config import Config, Txt 
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 def progress_for_pyrogram(current, total, ud_type, message, start):
     now = time.time()
