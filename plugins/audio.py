@@ -4,7 +4,6 @@ import subprocess
 import sys
 import math
 import time 
-import progress 
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters
@@ -38,7 +37,7 @@ def trim_video(input_file, start_time, end_time, output_file):
         output_file
     ]
     return run_command(command)
-    
+
 @Client.on_message(filters.command("remove_audio"))
 def handle_remove_audio(client, message):
     if not message.reply_to_message or not message.reply_to_message.video:
@@ -46,14 +45,14 @@ def handle_remove_audio(client, message):
         return
 
     video = message.reply_to_message.video
-    file_path = client.download_media(video, progress=progress_for_pyrogram, progress_args=("Downloading", message))
+    file_path = client.download_media(video)
     output_file_no_audio = tempfile.mktemp(suffix=".mp4")
 
     future = executor.submit(remove_audio, file_path, output_file_no_audio)
     success = future.result()
 
     if success:
-        client.send_video(chat_id=message.chat.id, video=output_file_no_audio, progress=progress_for_pyrogram, progress_args=("Uploading", message))
+        client.send_video(chat_id=message.chat.id, video=output_file_no_audio)
     else:
         message.reply_text("Failed to process the video. Please try again later.")
 
@@ -71,14 +70,14 @@ def handle_trim_video(client, message):
     start_time = args[1]
     end_time = args[2]
     video = message.reply_to_message.video
-    file_path = client.download_media(video, progress=progress_for_pyrogram, progress_args=("Downloading", message))
+    file_path = client.download_media(video)
     output_file_trimmed = tempfile.mktemp(suffix=".mp4")
 
     future = executor.submit(trim_video, file_path, start_time, end_time, output_file_trimmed)
     success = future.result()
 
     if success:
-        client.send_video(chat_id=message.chat.id, video=output_file_trimmed, progress=progress_for_pyrogram, progress_args=("Uploading", message))
+        client.send_video(chat_id=message.chat.id, video=output_file_trimmed)
     else:
         message.reply_text("Failed to process the video. Please try again later.")
 
