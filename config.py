@@ -23,15 +23,9 @@ class Config(object):
     
 class Txt(object):
     
-    START_TXT = """Hello {} 
+    START_TXT = """Hello Friends i am The Advance 📹Video Editor bot i have special Features like "Audio remover" and "video trimmer" 
     
-➻ This Is An Advanced Editor bot .
-    
-➻ Using This Bot you can remove audio and trim videos in the file .
-    
-➻ the other Amazing features are coming soon.
-    
-<b>Bot Is Made By @Anime_Warrior_Tamil</b>"""
+</a>\n Bot Is Made By @Anime_Warrior_Tamil</b>"""
     
     ABOUT_TXT = f"""<b>○ Creator : <a href='tg://user?id={OWNER_ID}'>This Person</a>\n○ Language : <code>Python3</code>\n○ Library : <a href='https://docs.pyrogram.org/'>Pyrogram asyncio {__version__}>Click here</a>\n○ Channel : @Anime_Warrior_Tamil\n○ Support Group : @+NITVxLchQhYzNGZl</b>", 
     
