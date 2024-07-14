@@ -3,6 +3,7 @@ import time
 import math
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from config import Txt
 
 @Client.on_message(filters.command("start"))
 def start(client, message):
