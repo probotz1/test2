@@ -4,13 +4,12 @@ import subprocess
 import sys
 import math
 import time
+import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters
 from plugins import start
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait
-from pyrogram.file_id import FileId
 
 app = Flask(__name__)
 
@@ -67,11 +66,11 @@ def TimeFormatter(seconds: int) -> str:
     )
     return tmp[:-2]
 
-async def progress_for_pyrogram(current, total, client, message, start, type_of_ps, file_name=None):
+async def progress_for_pyrogram(current, total, client, message, start, type_of_ps):
     now = time.time()
     diff = now - start
 
-    if round(diff % 10) == 0 or current == total:
+    if round(diff % 5) == 0 or current == total:
         percentage = current * 100 / total
         speed = current / diff
         elapsed_time = round(diff)
