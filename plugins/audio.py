@@ -10,7 +10,6 @@ from pyrogram import Client, filters
 from plugins import start
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait
-from plugins.wolf import progress_for_pyrogram
 
 app = Flask(__name__)
 
