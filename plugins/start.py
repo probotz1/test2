@@ -1,30 +1,16 @@
-import os
-import time
-import subprocess
-import sys
-import tempfile
-from flask import Flask, request, jsonify
-from pyrogram import Client, filters
-from plugins import open
-from plugins.database import awtbotz
-from progress import progress_for_pyrogram, humanbytes, convert
-from concurrent.futures import ThreadPoolExecutor
+import time 
 
-app = Flask(__name__)
-
-# Thread pool for async processing
-executor = ThreadPoolExecutor(max_workers=4)
-
-def run_command(command):
-    try:
-        subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        return True
-    except subprocess.CalledProcessError as e:
-        print(f"Error: {e}", file=sys.stderr)
-        return False
 @Client.on_message(filters.command("start"))
 def start(client, message):
-    message.reply_text("Hello! Send me a video to process. Use /help to see available commands.")
+    start_text = "Hello! Send me a video to process. Use /help to see available commands."
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("Update Channel", url="https://t.me/update_channel")],
+        [InlineKeyboardButton("Support Group", url="https://t.me/support_group")],
+        [InlineKeyboardButton("Help", callback_data="help")],
+        [InlineKeyboardButton("About", callback_data="about")],
+        [InlineKeyboardButton("Close", callback_data="close")]
+    ])
+    message.reply_text(start_text, reply_markup=keyboard)
 
 @Client.on_message(filters.command("help"))
 def help(client, message):
@@ -34,82 +20,50 @@ def help(client, message):
         "/remove_audio - Remove audio from a video\n"
         "/trim_video - Trim a video\n"
     )
-    message.reply_text(help_text)
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("Back", callback_data="back")],
+        [InlineKeyboardButton("Close", callback_data="close")]
+    ])
+    message.reply_text(help_text, reply_markup=keyboard)
 
-def remove_audio(input_file, output_file):
-    command = ['ffmpeg', '-i', input_file, '-c', 'copy', '-an', output_file]
-    return run_command(command)
+@Client.on_callback_query(filters.regex("help"))
+def on_help_callback(client, callback_query):
+    help_text = (
+        "Available commands:\n"
+        "/start - Start the bot\n"
+        "/remove_audio - Remove audio from a video\n"
+        "/trim_video - Trim a video\n"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("Back", callback_data="back")],
+        [InlineKeyboardButton("Close", callback_data="close")]
+    ])
+    callback_query.message.edit_text(help_text, reply_markup=keyboard)
 
-def trim_video(input_file, start_time, end_time, output_file):
-    command = [
-        'ffmpeg', '-i', input_file,
-        '-ss', start_time,
-        '-to', end_time,
-        '-c', 'copy',
-        output_file
-    ]
-    return run_command(command)
+@Client.on_callback_query(filters.regex("about"))
+def on_about_callback(client, callback_query):
+    about_text = (
+        "This bot allows you to process videos by removing audio or trimming them.\n"
+        "Developed by [Your Name or Company]."
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("Back", callback_data="back")],
+        [InlineKeyboardButton("Close", callback_data="close")]
+    ])
+    callback_query.message.edit_text(about_text, reply_markup=keyboard)
 
-@Client.on_message(filters.command("remove_audio"))
-def handle_remove_audio(client, message):
-    if not message.reply_to_message or not message.reply_to_message.video:
-        message.reply_text("Please reply to a video message with the /remove_audio command.")
-        return
+@Client.on_callback_query(filters.regex("back"))
+def on_back_callback(client, callback_query):
+    start_text = "Hello! Send me a video to process. Use /help to see available commands."
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("Update Channel", url="https://t.me/update_channel")],
+        [InlineKeyboardButton("Support Group", url="https://t.me/support_group")],
+        [InlineKeyboardButton("Help", callback_data="help")],
+        [InlineKeyboardButton("About", callback_data="about")],
+        [InlineKeyboardButton("Close", callback_data="close")]
+    ])
+    callback_query.message.edit_text(start_text, reply_markup=keyboard)
 
-    video = message.reply_to_message.video
-    file_path = client.download_media(video)
-    output_file_no_audio = tempfile.mktemp(suffix=".mp4")
-
-    future = executor.submit(remove_audio, file_path, output_file_no_audio)
-    success = future.result()
-
-    if success:
-        client.send_video(chat_id=message.chat.id, video=output_file_no_audio)
-    else:
-        message.reply_text("Failed to process the video. Please try again later.")
-
-@Client.on_message(filters.command("trim_video"))
-def handle_trim_video(client, message):
-    args = message.command
-    if len(args) != 3:
-        message.reply_text("Usage: /trim_video <start_time> <end_time>\nExample: /trim_video 00:00:10 00:00:20")
-        return
-
-    if not message.reply_to_message or not message.reply_to_message.video:
-        message.reply_text("Please reply to a video message with the /trim_video command.")
-        return
-
-    start_time = args[1]
-    end_time = args[2]
-    video = message.reply_to_message.video
-    file_path = client.download_media(video)
-    output_file_trimmed = tempfile.mktemp(suffix=".mp4")
-
-    future = executor.submit(trim_video, file_path, start_time, end_time, output_file_trimmed)
-    success = future.result()
-
-    if success:
-        client.send_video(chat_id=message.chat.id, video=output_file_trimmed)
-    else:
-        message.reply_text("Failed to process the video. Please try again later.")
-
-@app.route('/process', methods=['POST'])
-def process_request():
-    data = request.json
-    input_file = data['input_file']
-    output_file = data['output_file']
-    action = data['action']
-
-    if action == 'remove_audio':
-        success = executor.submit(remove_audio, input_file, output_file).result()
-    elif action == 'trim_video':
-        start_time = data['start_time']
-        end_time = data['end_time']
-        success = executor.submit(trim_video, input_file, start_time, end_time, output_file).result()
-    else:
-        return jsonify({"error": "Invalid action"}), 400
-
-    if not success:
-        return jsonify({"status": "failure", "message": "Processing failed"}), 500
-
-    return jsonify({"status": "success", "output_file": output_file})
+@Client.on_callback_query(filters.regex("close"))
+def on_close_callback(client, callback_query):
+    callback_query.message.delete()
