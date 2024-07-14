@@ -1,8 +1,8 @@
 import time, math
-from config import Config, Txt 
+from config import Txt 
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-async def progress_for_pyrogram(current, total, ud_type, message, start):
+def progress_for_pyrogram(current, total, ud_type, message, start):
     now = time.time()
     diff = now - start
     if round(diff % 5.00) == 0 or current == total:        
@@ -26,10 +26,5 @@ async def progress_for_pyrogram(current, total, ud_type, message, start):
             humanbytes(speed),            
             estimated_total_time if estimated_total_time != '' else "0 s"
         )
-        try:
-            await message.edit(
-                text=f"{ud_type}\n\n{tmp}",               
-                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("✖️ Cancel ✖️", callback_data="close")]])                                               
-            )
         except:
             pass
