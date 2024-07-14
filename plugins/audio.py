@@ -39,29 +39,23 @@ def trim_video(input_file, start_time, end_time, output_file):
     ]
     return run_command(command)
     
-
 @Client.on_message(filters.command("remove_audio"))
 def handle_remove_audio(client, message):
-    if not message.reply_to_message or not message.reply_to_message.document:
-        message.reply_text("Please reply to a document message with the /remove_audio command.")
+    if not message.reply_to_message or not message.reply_to_message.video:
+        message.reply_text("Please reply to a video message with the /remove_audio command.")
         return
 
     video = message.reply_to_message.video
-    start_time = time.time()
-    progress_message = message.reply_text("Downloading...")
-
-    file_path = client.download_media(document, progress=progress, progress_args=(progress_message, start_time))
-    video_file = tempfile.mktemp(suffix=".mp4")
+    file_path = client.download_media(video, progress=progress_for_pyrogram, progress_args=("Downloading", message))
     output_file_no_audio = tempfile.mktemp(suffix=".mp4")
 
-    future_remove_audio = executor.submit(remove_audio, file_path, output_file_no_audio)
-    success_remove_audio = future_remove_audio.result()
+    future = executor.submit(remove_audio, file_path, output_file_no_audio)
+    success = future.result()
 
-    if success_remove_audio:
-        upload_start_time = time.time()
-        client.send_video(chat_id=message.chat.id, video=output_file_no_audio, progress=progress, progress_args=(progress_message, upload_start_time))
+    if success:
+        client.send_video(chat_id=message.chat.id, video=output_file_no_audio, progress=progress_for_pyrogram, progress_args=("Uploading", message))
     else:
-        progress_message.edit_text("Failed to process the video. Please try again later.")
+        message.reply_text("Failed to process the video. Please try again later.")
 
 @Client.on_message(filters.command("trim_video"))
 def handle_trim_video(client, message):
@@ -70,28 +64,23 @@ def handle_trim_video(client, message):
         message.reply_text("Usage: /trim_video <start_time> <end_time>\nExample: /trim_video 00:00:10 00:00:20")
         return
 
-    if not message.reply_to_message or not message.reply_to_message.document:
-        message.reply_text("Please reply to a document message with the /trim_video command.")
+    if not message.reply_to_message or not message.reply_to_message.video:
+        message.reply_text("Please reply to a video message with the /trim_video command.")
         return
 
     start_time = args[1]
     end_time = args[2]
-    document = message.reply_to_message.document
-    download_start_time = time.time()
-    progress_message = message.reply_text("Downloading...")
-
-    file_path = client.download_media(document, progress=progress, progress_args=(progress_message, download_start_time))
-    video_file = tempfile.mktemp(suffix=".mp4")
+    video = message.reply_to_message.video
+    file_path = client.download_media(video, progress=progress_for_pyrogram, progress_args=("Downloading", message))
     output_file_trimmed = tempfile.mktemp(suffix=".mp4")
 
-    future_trim_video = executor.submit(trim_video, video_file, start_time, end_time, output_file_trimmed)
-    success_trim_video = future_trim_video.result()
+    future = executor.submit(trim_video, file_path, start_time, end_time, output_file_trimmed)
+    success = future.result()
 
-    if success_trim_video:
-        upload_start_time = time.time()
-        client.send_video(chat_id=message.chat.id, video=output_file_trimmed, progress=progress, progress_args=(progress_message, upload_start_time))
+    if success:
+        client.send_video(chat_id=message.chat.id, video=output_file_trimmed, progress=progress_for_pyrogram, progress_args=("Uploading", message))
     else:
-        progress_message.edit_text("Failed to process the video. Please try again later.")
+        message.reply_text("Failed to process the video. Please try again later.")
 
 @app.route('/process', methods=['POST'])
 def process_request():
@@ -100,11 +89,16 @@ def process_request():
     output_file = data['output_file']
     action = data['action']
 
-    video_file = tempfile.mktemp(suffix=".mp4")
-    convert_success = executor.submit(convert_to_video, input_file, video_file).result()
-
-    if not convert_success:
-        return jsonify({"status": "failure", "message": "Failed to convert file to video"}), 500
-
     if action == 'remove_audio':
-        success = executor.submit(remove_audio, video_file, output_file).result()
+        success = executor.submit(remove_audio, input_file, output_file).result()
+    elif action == 'trim_video':
+        start_time = data['start_time']
+        end_time = data['end_time']
+        success = executor.submit(trim_video, input_file, start_time, end_time, output_file).result()
+    else:
+        return jsonify({"error": "Invalid action"}), 400
+
+    if not success:
+        return jsonify({"status": "failure", "message": "Processing failed"}), 500
+
+    return jsonify({"status": "success", "output_file": output_file})
