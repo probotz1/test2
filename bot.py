@@ -5,7 +5,7 @@ from pyrogram.raw.all import layer
 from config import Config
 from aiohttp import web
 from plugins import web_server
-from plugins import start
+from plugins import audio 
 
 class Bot(Client):
 
