@@ -66,7 +66,7 @@ def on_back_callback(client, callback_query):
         InlineKeyboardButton("About", callback_data="about")
     ],[
         InlineKeyboardButton("Close", callback_data="close")
-    ])
+    ]])
     callback_query.message.edit_text(start_text, reply_markup=keyboard)
 
 @Client.on_callback_query(filters.regex("close"))
