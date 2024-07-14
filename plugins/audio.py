@@ -3,8 +3,7 @@ import tempfile
 import subprocess
 import sys
 import math
-import time
-import asyncio 
+import time 
 import progress 
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
@@ -43,6 +42,7 @@ def trim_video(input_file, start_time, end_time, output_file):
         output_file
     ]
     return run_command(command)
+    
 
 @Client.on_message(filters.command("remove_audio"))
 def handle_remove_audio(client, message):
