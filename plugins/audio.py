@@ -25,10 +25,6 @@ def run_command(command):
         print(f"Error: {e}", file=sys.stderr)
         return False
 
-def convert_to_video(input_file, output_file):
-    command = ['ffmpeg', '-i', input_file, '-c:v', 'libx264', '-preset', 'slow', '-crf', '22', output_file]
-    return run_command(command)
-
 def remove_audio(input_file, output_file):
     command = ['ffmpeg', '-i', input_file, '-c', 'copy', '-an', output_file]
     return run_command(command)
@@ -50,7 +46,7 @@ def handle_remove_audio(client, message):
         message.reply_text("Please reply to a document message with the /remove_audio command.")
         return
 
-    document = message.reply_to_message.document
+    video = message.reply_to_message.video
     start_time = time.time()
     progress_message = message.reply_text("Downloading...")
 
@@ -58,14 +54,7 @@ def handle_remove_audio(client, message):
     video_file = tempfile.mktemp(suffix=".mp4")
     output_file_no_audio = tempfile.mktemp(suffix=".mp4")
 
-    future_convert = executor.submit(convert_to_video, file_path, video_file)
-    success_convert = future_convert.result()
-
-    if not success_convert:
-        progress_message.edit_text("Failed to convert the file to a video. Please try again later.")
-        return
-
-    future_remove_audio = executor.submit(remove_audio, video_file, output_file_no_audio)
+    future_remove_audio = executor.submit(remove_audio, file_path, output_file_no_audio)
     success_remove_audio = future_remove_audio.result()
 
     if success_remove_audio:
@@ -94,13 +83,6 @@ def handle_trim_video(client, message):
     file_path = client.download_media(document, progress=progress, progress_args=(progress_message, download_start_time))
     video_file = tempfile.mktemp(suffix=".mp4")
     output_file_trimmed = tempfile.mktemp(suffix=".mp4")
-
-    future_convert = executor.submit(convert_to_video, file_path, video_file)
-    success_convert = future_convert.result()
-
-    if not success_convert:
-        progress_message.edit_text("Failed to convert the file to a video. Please try again later.")
-        return
 
     future_trim_video = executor.submit(trim_video, video_file, start_time, end_time, output_file_trimmed)
     success_trim_video = future_trim_video.result()
