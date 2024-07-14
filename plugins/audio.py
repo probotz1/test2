@@ -10,6 +10,7 @@ from pyrogram import Client, filters
 from plugins import start
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait
+from plugins.wolf import progress_for_pyrogram
 
 app = Flask(__name__)
 
@@ -52,7 +53,7 @@ def handle_remove_audio(client, message):
     success = future.result()
 
     if success:
-        client.send_video(chat_id=message.chat.id, video=output_file_no_audio)
+        client.send_video(chat_id=message.chat.id, video=output_file_no_audio, progress=progress_for_pyrogram)
     else:
         message.reply_text("Failed to process the video. Please try again later.")
 
@@ -77,7 +78,7 @@ def handle_trim_video(client, message):
     success = future.result()
 
     if success:
-        client.send_video(chat_id=message.chat.id, video=output_file_trimmed)
+        client.send_video(chat_id=message.chat.id, video=output_file_trimmed, progress=progress_for_pyrogram)
     else:
         message.reply_text("Failed to process the video. Please try again later.")
 
