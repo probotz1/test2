@@ -4,7 +4,7 @@ import subprocess
 import sys
 import math
 import time
-import asyncio import sleep
+import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters
