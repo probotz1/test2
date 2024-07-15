@@ -9,7 +9,7 @@ from config import Config, Txt
 
 @Client.on_message(filters.private & filters.command("start"))
 async def start(client, message):
-        user = message.from_user
+    user = message.from_user
     await db.add_user(client, message)                
     button = InlineKeyboardMarkup([[
         InlineKeyboardButton("👨‍💻 Dᴇᴠꜱ 👨‍💻", callback_data='dev')
