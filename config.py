@@ -16,6 +16,7 @@ class Config(object):
 
     # other configs
     BOT_UPTIME  = time.time()
+    LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", None))
     START_PIC   = os.environ.get("START_PIC", "https://graph.org/file/5ba316e179b39faa71904.jpg")
 
     # wes response configuration     
