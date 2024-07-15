@@ -28,19 +28,38 @@ class Txt(object):
     
 </a>"\n Bot Is Made By @Anime_Warrior_Tamil"</b>"""
     
-    ABOUT_TXT = f"""<b>○ Creator : @speedwolf</a>\n○ Language : <code>Python3</code>\n○ Library : <a href='https://docs.pyrogram.org/'>Pyrogram asyncio</a>\n○ Channel : @Anime_Warrior_Tamil\n○ Support Group : @+NITVxLchQhYzNGZl</b>", 
-    
-<b>♻️ Bot Made By :</b> @Anime_Warrior_Tamil"""
+     ABOUT_TXT = """<b>╭───────────⍟
+├🤖 ᴍy ɴᴀᴍᴇ : {}
+├🖥️ Dᴇᴠᴇʟᴏᴩᴇʀꜱ : <a href=https://t.me/IllegalDeveloperBot>**ɪʟʟᴇɢᴀʟ ᴅᴇᴠᴇʟᴏᴘᴇʀ**</a> 🕷
+├👨‍💻 Pʀᴏɢʀᴀᴍᴇʀ : **ᴋᴜɴᴀʟ ꜱɪɴɢʜ**
+╰───────────────⍟ """
+
+    HELP_TXT = """
+🌌 <b><u>Hᴏᴡ Tᴏ Sᴇᴛ Tʜᴜᴍʙɴɪʟᴇ</u></b>
+  
+<b>•»</b> /start Tʜᴇ Bᴏᴛ Aɴᴅ Sᴇɴᴅ Aɴy Pʜᴏᴛᴏ Tᴏ Aᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟy Sᴇᴛ Tʜᴜᴍʙɴɪʟᴇ.
+<b>•»</b> /audio_remove Uꜱᴇ Tʜɪꜱ Cᴏᴍᴍᴀɴᴅ Tᴏ Dᴇʟᴇᴛᴇ Yᴏᴜʀ Oʟᴅ Tʜᴜᴍʙɴɪʟᴇ.
+<b>•»</b> /video_trim Uꜱᴇ Tʜɪꜱ Cᴏᴍᴍᴀɴᴅ Tᴏ Vɪᴇᴡ
+
+Exᴀᴍᴩʟᴇ:- /set_caption 📕 Fɪʟᴇ Nᴀᴍᴇ: {filename}
+💾 Sɪᴢᴇ: {filesize}
+⏰ Dᴜʀᴀᴛɪᴏɴ: {duration}
+
+✏️ <b><u>Hᴏᴡ Tᴏ Rᴇɴᴀᴍᴇ A Fɪʟᴇ</u></b>
+
+<b>•»</b> Sᴇɴᴅ Aɴy Fɪʟᴇ Aɴᴅ Tyᴩᴇ Nᴇᴡ Fɪʟᴇ Nɴᴀᴍᴇ \nAɴᴅ Aᴇʟᴇᴄᴛ Tʜᴇ Fᴏʀᴍᴀᴛ [ document, video, audio ].           
+
+ℹ️ 𝗔𝗻𝘆 𝗢𝘁𝗵𝗲𝗿 𝗛𝗲𝗹𝗽 𝗖𝗼𝗻𝘁𝗮𝗰𝘁 :- <a href=https://t.me/IllegalDeveloperBot>𝘽𝙤𝙩 𝘿𝙚𝙫𝙚𝙡𝙤𝙥𝙚𝙧</a>
+"""
+
+#⚠️ Dᴏɴ'ᴛ Rᴇᴍᴏᴠᴇ Oᴜʀ Cʀᴇᴅɪᴛꜱ @ILLGELA_DEVELOPER🙏🥲
+    DEV_TXT = """hiiiiiiiiiii"""
     
     PROGRESS_BAR = """\n
 <b>📁 Size</b> : {1} | {2}
 <b>⏳️ Done</b> : {0}%
 <b>🚀 Speed</b> : {3}/s
 <b>⏰️ ETA</b> : {4} """
-
-    HELP_TXT = """<b>Hey</b> {}
-    
-see the command of my bot."""
 
 
 
