@@ -4,7 +4,6 @@ import subprocess
 import sys
 import math
 import time
-import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters
@@ -46,11 +45,20 @@ async def handle_remove_audio(client, message):
         await message.reply_text("Please reply to a video or document message with the /remove_audio command.")
         return
 
+    media = message.reply_to_message.video or message.reply_to_message.document
+    downloading_message = await message.reply_text("Downloading media...")
+
+    file_path = await client.download_media(media)
+    await downloading_message.edit_text("Download complete. Processing...")
+
     output_file_no_audio = tempfile.mktemp(suffix=".mp4")
 
     future = executor.submit(remove_audio, file_path, output_file_no_audio)
     success = future.result()
 
+    if success:
+        await client.send_document(chat_id=message.chat.id, document=output_file_no_audio)
+        await message.reply_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
 
@@ -67,12 +75,20 @@ async def handle_trim_video(client, message):
 
     start_time = args[1]
     end_time = args[2]
+    media = message.reply_to_message.video or message.reply_to_message.document
+    downloading_message = await message.reply_text("Downloading media...")
+
+    file_path = await client.download_media(media)
+    await downloading_message.edit_text("Download complete. Processing...")
 
     output_file_trimmed = tempfile.mktemp(suffix=".mp4")
 
     future = executor.submit(trim_video, file_path, start_time, end_time, output_file_trimmed)
     success = future.result()
 
+    if success:
+        await client.send_document(chat_id=message.chat.id, document=output_file_trimmed)
+        await message.reply_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
 
