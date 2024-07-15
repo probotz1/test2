@@ -46,25 +46,11 @@ async def handle_remove_audio(client, message):
         await message.reply_text("Please reply to a video or document message with the /remove_audio command.")
         return
 
-    media = message.reply_to_message.video or message.reply_to_message.document
-    file_path = await client.download_media(
-        media,
-        progress=progress_for_pyrogram,
-        progress_args=(message, time.time(), "Downloading")
-    )
-
     output_file_no_audio = tempfile.mktemp(suffix=".mp4")
 
     future = executor.submit(remove_audio, file_path, output_file_no_audio)
     success = future.result()
 
-    if success:
-        await client.send_document(
-            chat_id=message.chat.id,
-            document=output_file_no_audio,
-            progress=progress_for_pyrogram,
-            progress_args=(message, time.time(), "Uploading")
-        )
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
 
@@ -81,25 +67,12 @@ async def handle_trim_video(client, message):
 
     start_time = args[1]
     end_time = args[2]
-    media = message.reply_to_message.video or message.reply_to_message.document
-    file_path = await client.download_media(
-        media,
-        progress=progress_for_pyrogram,
-        progress_args=(message, time.time(), "Downloading")
-    )
 
     output_file_trimmed = tempfile.mktemp(suffix=".mp4")
 
     future = executor.submit(trim_video, file_path, start_time, end_time, output_file_trimmed)
     success = future.result()
 
-    if success:
-        await client.send_document(
-            chat_id=message.chat.id,
-            document=output_file_trimmed,
-            progress=progress_for_pyrogram,
-            progress_args=(message, time.time(), "Uploading")
-        )
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
 
