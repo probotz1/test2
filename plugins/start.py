@@ -4,6 +4,7 @@ import math
 import random
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ForceReply, CallbackQuery
+from helper.database import db
 from config import Config, Txt
 
 @Client.on_message(filters.private & filters.command("start"))
