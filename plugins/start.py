@@ -8,89 +8,87 @@ from config import Config, Txt
 
 @Client.on_message(filters.private & filters.command("start"))
 async def start(client, message):
-    user = message.from_user
+        user = message.from_user
     await db.add_user(client, message)                
     button = InlineKeyboardMarkup([[
-        InlineKeyboardButton("Update Channel", url="https://t.me/Anime_Warrior_Tamil"),
-        InlineKeyboardButton("Support Group", url="https://t.me/+NITVxLchQhYzNGZl")
-    ],[
-        InlineKeyboardButton("Help", callback_data="help"),
-        InlineKeyboardButton("About", callback_data="about")
-    ],[
-        InlineKeyboardButton("Close", callback_data="close")
+        InlineKeyboardButton("👨‍💻 Dᴇᴠꜱ 👨‍💻", callback_data='dev')
+        ],[
+        InlineKeyboardButton('📯 Uᴩᴅᴀᴛᴇꜱ', url='https://t.me/Illegal_Developer'),
+        InlineKeyboardButton('💁‍♂️ Sᴜᴩᴩᴏʀᴛ', url='https://t.me/IllegalDeveloperBot')
+        ],[
+        InlineKeyboardButton('🎛️ Aʙᴏᴜᴛ', callback_data='about'),
+        InlineKeyboardButton('🛠️ Hᴇʟᴩ', callback_data='help')
     ]])
-    message.reply_text(start_text, reply_markup=keyboard)
-    
     if Config.START_PIC:
         await message.reply_photo(Config.START_PIC, caption=Txt.START_TXT.format(user.mention), reply_markup=button)       
     else:
         await message.reply_text(text=Txt.START_TXT.format(user.mention), reply_markup=button, disable_web_page_preview=True)
    
-@Client.on_message(filters.command("start"))
-def start(client, message):
-    start_text = Txt.START_TXT,
-    keyboard = InlineKeyboardMarkup([[
-        InlineKeyboardButton("Update Channel", url="https://t.me/Anime_Warrior_Tamil"),
-        InlineKeyboardButton("Support Group", url="https://t.me/+NITVxLchQhYzNGZl")
-    ],[
-        InlineKeyboardButton("Help", callback_data="help"),
-        InlineKeyboardButton("About", callback_data="about")
-    ],[
-        InlineKeyboardButton("Close", callback_data="close")
-    ]])
-    message.reply_text(start_text, reply_markup=keyboard)
 
-@Client.on_message(filters.command("help"))
-def help(client, message):
-    help_text = (
-        "Available commands:\n"
-        "/start - Start the bot\n"
-        "/remove_audio - Remove audio from a video\n"
-        "/trim_video - Trim a video\n"
-    )
-    keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("Back", callback_data="back")],
-        [InlineKeyboardButton("Close", callback_data="close")]
-    ])
-    message.reply_text(help_text, reply_markup=keyboard)
-
-@Client.on_callback_query(filters.regex("help"))
-def on_help_callback(client, callback_query):
-    help_text = (
-        "Available commands:\n"
-        "/start - Start the bot\n"
-        "/remove_audio - Remove audio from a video\n"
-        "/trim_video - Trim a video\n"
-    )
-    keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("Back", callback_data="back")],
-        [InlineKeyboardButton("Close", callback_data="close")]
-    ])
-    callback_query.message.edit_text(help_text, reply_markup=keyboard)
-
-@Client.on_callback_query(filters.regex("about"))
-def on_about_callback(client, callback_query):
-    about_text = Txt.ABOUT_TXT,
-    keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("Back", callback_data="back")],
-        [InlineKeyboardButton("Close", callback_data="close")]
-    ])
-    callback_query.message.edit_text(about_text, reply_markup=keyboard)
-
-@Client.on_callback_query(filters.regex("back"))
-def on_back_callback(client, callback_query):
-    start_text = "Hello! Send me a video to process. Use /help to see available commands."
-    keyboard = InlineKeyboardMarkup([[
-        InlineKeyboardButton("Update Channel", url="https://t.me/Anime_Warrior_Tamil"),
-        InlineKeyboardButton("Support Group", url="https://t.me/+NITVxLchQhYzNGZl")
-    ],[
-        InlineKeyboardButton("Help", callback_data="help"),
-        InlineKeyboardButton("About", callback_data="about")
-    ],[
-        InlineKeyboardButton("Close", callback_data="close")
-    ]])
-    callback_query.message.edit_text(start_text, reply_markup=keyboard)
-
-@Client.on_callback_query(filters.regex("close"))
-def on_close_callback(client, callback_query):
-    callback_query.message.delete()
+@Client.on_callback_query()
+async def cb_handler(client, query: CallbackQuery):
+    data = query.data 
+    if data == "start":
+        await query.message.edit_text(
+            text=Txt.START_TXT.format(query.from_user.mention),
+            disable_web_page_preview=True,
+            reply_markup = InlineKeyboardMarkup([[
+                InlineKeyboardButton("👨‍💻 Dᴇᴠꜱ 👨‍💻", callback_data='dev')
+                ],[
+                InlineKeyboardButton('📯 Uᴩᴅᴀᴛᴇꜱ', url='https://t.me/Illegal_Developer'),
+                InlineKeyboardButton('💁‍♂️ Sᴜᴩᴩᴏʀᴛ', url='https://t.me/IllegalDeveloperBot')
+                ],[
+                InlineKeyboardButton('🎛️ Aʙᴏᴜᴛ', callback_data='about'),
+                InlineKeyboardButton('🛠️ Hᴇʟᴩ', callback_data='help')
+            ]])
+        )
+    elif data == "help":
+        await query.message.edit_text(
+            text=Txt.HELP_TXT,
+            disable_web_page_preview=True,
+            reply_markup=InlineKeyboardMarkup([[
+                #⚠️ don't change source code & source link ⚠️ #
+                InlineKeyboardButton("≛ ᴏᴡɴᴇʀ", url="https://t.me/Illegal_Developer")
+                ],[
+                InlineKeyboardButton("🧐 ʀᴇᴘᴏʀᴛ ᴀʙᴜꜱᴇ", url='https://t.me/IllegalDeveloperBot')
+                ],[
+                InlineKeyboardButton("🔒 Cʟᴏꜱᴇ", callback_data = "close"),
+                InlineKeyboardButton("◀️ Bᴀᴄᴋ", callback_data = "start")
+            ]])            
+        )
+    elif data == "about":
+        await query.message.edit_text(
+            text=Txt.ABOUT_TXT.format(client.mention),
+            disable_web_page_preview = True,
+            reply_markup=InlineKeyboardMarkup([[
+                #⚠️ don't change source code & source link ⚠️ #
+                InlineKeyboardButton("≛ ᴏᴡɴᴇʀ", url="https://t.me/Illegal_Developer")
+                ],[
+                InlineKeyboardButton("🧐 ʀᴇᴘᴏʀᴛ ᴀʙᴜꜱᴇ", url="https://t.me/IllegalDeveloperBot")
+                ],[
+                InlineKeyboardButton("🔒 Cʟᴏꜱᴇ", callback_data = "close"),
+                InlineKeyboardButton("◀️ Bᴀᴄᴋ", callback_data = "start")
+            ]])            
+        )
+    elif data == "dev":
+        await query.message.edit_text(
+            text=Txt.DEV_TXT,
+            disable_web_page_preview=True,
+            reply_markup=InlineKeyboardMarkup([[
+                #⚠️ don't change source code & source link ⚠️ #
+                InlineKeyboardButton("≛ ᴏᴡɴᴇʀ", url="https://t.me/Illegal_Developer")
+                ],[
+                InlineKeyboardButton("🧐 ʀᴇᴘᴏʀᴛ ᴀʙᴜꜱᴇ", url="https://t.me/IllegalDeveloperBot")
+                ],[
+                InlineKeyboardButton("🔒 Cʟᴏꜱᴇ", callback_data = "close"),
+                InlineKeyboardButton("◀️ Bᴀᴄᴋ", callback_data = "start")
+            ]])          
+        )
+    elif data == "close":
+        try:
+            await query.message.delete()
+            await query.message.reply_to_message.delete()
+            await query.message.continue_propagation()
+        except:
+            await query.message.delete()
+            await query.message.continue_propagation()
