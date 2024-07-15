@@ -7,6 +7,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters
+from plugins import start
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait
 from pyrogram.file_id import FileId
