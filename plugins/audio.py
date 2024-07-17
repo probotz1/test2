@@ -57,7 +57,7 @@ async def handle_remove_audio(client, message):
      	return await ms.edit(e)
      
     duration = 0
-    if message.reply_text = ("Download started....")
+    if message.reply_text = ("Download started...."):
     await ms.edit("`Trying To Uploading`")
     type = update.data.split("_")[1]
 
