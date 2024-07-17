@@ -1,15 +1,15 @@
 import time
 import math
 
-async def progress_for_pyrogram(current, total, start, type_of_transfer, message):
+async def progress_for_pyrogram(current, total, message, type_of_transfer, start):
     """
     Displays the progress of a file transfer operation.
 
     :param current: The current amount of bytes transferred.
     :param total: The total amount of bytes to be transferred.
-    :param start: The start time of the transfer.
-    :param type_of_transfer: A string describing the type of transfer (e.g., "Upload", "Download").
     :param message: The message object to edit with the progress.
+    :param type_of_transfer: A string describing the type of transfer (e.g., "Upload", "Download").
+    :param start: The start time of the transfer.
     """
     now = time.time()
     diff = now - start
