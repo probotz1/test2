@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters
 from plugins import start
-from helper.utils import progress_for_pyrogram, convert, humanbytes
+from helper.utils import progress_for_pyrogram, convert, humanbytes  # Import from progress.py
 from pyrogram.errors import FloodWait
 
 app = Flask(__name__)
@@ -50,7 +50,7 @@ async def handle_remove_audio(client, message):
     media = message.reply_to_message.video or message.reply_to_message.document
     downloading_message = await message.reply_text("Downloading media...")
 
-    file_path = await client.download_media(media)
+    file_path = await client.download_media(media, progress=progress_for_pyrogram, progress_args=("Download", message))
     await downloading_message.edit_text("Download complete. Processing...")
 
     output_file_no_audio = tempfile.mktemp(suffix=".mp4")
@@ -59,8 +59,14 @@ async def handle_remove_audio(client, message):
     success = future.result()
 
     if success:
-        await client.send_document(chat_id=message.chat.id, document=output_file_no_audio)
-        await message.reply_text("Upload complete.")
+        uploading_message = await message.reply_text("Uploading media...")
+        await client.send_document(
+            chat_id=message.chat.id,
+            document=output_file_no_audio,
+            progress=progress_for_pyrogram,
+            progress_args=("Upload", uploading_message)
+        )
+        await uploading_message.edit_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
 
@@ -80,7 +86,7 @@ async def handle_trim_video(client, message):
     media = message.reply_to_message.video or message.reply_to_message.document
     downloading_message = await message.reply_text("Downloading media...")
 
-    file_path = await client.download_media(media)
+    file_path = await client.download_media(media, progress=progress_for_pyrogram, progress_args=("Download", message))
     await downloading_message.edit_text("Download complete. Processing...")
 
     output_file_trimmed = tempfile.mktemp(suffix=".mp4")
@@ -89,8 +95,14 @@ async def handle_trim_video(client, message):
     success = future.result()
 
     if success:
-        await client.send_document(chat_id=message.chat.id, document=output_file_trimmed)
-        await message.reply_text("Upload complete.")
+        uploading_message = await message.reply_text("Uploading media...")
+        await client.send_document(
+            chat_id=message.chat.id,
+            document=output_file_trimmed,
+            progress=progress_for_pyrogram,
+            progress_args=("Upload", uploading_message)
+        )
+        await uploading_message.edit_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
 
