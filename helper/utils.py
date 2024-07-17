@@ -1,7 +1,7 @@
 import time
 import math
 
-def progress_for_pyrogram(current, total, start, type_of_transfer, message):
+async def progress_for_pyrogram(current, total, start, type_of_transfer, message):
     """
     Displays the progress of a file transfer operation.
 
