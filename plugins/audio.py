@@ -50,7 +50,12 @@ async def handle_remove_audio(client, message):
     media = message.reply_to_message.video or message.reply_to_message.document
     downloading_message = await message.reply_text("Downloading media...")
 
-    file_path = await client.download_media(media, progress=progress_for_pyrogram, progress_args=("Download", downloading_message))
+    start_time = time.time()
+    file_path = await client.download_media(
+        media, 
+        progress=progress_for_pyrogram, 
+        progress_args=(message, "Download", start_time)
+    )
     await downloading_message.edit_text("Download complete. Processing...")
 
     output_file_no_audio = tempfile.mktemp(suffix=".mp4")
@@ -60,11 +65,12 @@ async def handle_remove_audio(client, message):
 
     if success:
         uploading_message = await message.reply_text("Uploading media...")
+        start_time = time.time()
         await client.send_document(
             chat_id=message.chat.id,
             document=output_file_no_audio,
             progress=progress_for_pyrogram,
-            progress_args=("Upload", uploading_message)
+            progress_args=(uploading_message, "Upload", start_time)
         )
         await uploading_message.edit_text("Upload complete.")
     else:
@@ -86,7 +92,12 @@ async def handle_trim_video(client, message):
     media = message.reply_to_message.video or message.reply_to_message.document
     downloading_message = await message.reply_text("Downloading media...")
 
-    file_path = await client.download_media(media, progress=progress_for_pyrogram, progress_args=("Download", downloading_message))
+    start_time = time.time()
+    file_path = await client.download_media(
+        media, 
+        progress=progress_for_pyrogram, 
+        progress_args=(downloading_message, "Download", start_time)
+    )
     await downloading_message.edit_text("Download complete. Processing...")
 
     output_file_trimmed = tempfile.mktemp(suffix=".mp4")
@@ -96,11 +107,12 @@ async def handle_trim_video(client, message):
 
     if success:
         uploading_message = await message.reply_text("Uploading media...")
+        start_time = time.time()
         await client.send_document(
             chat_id=message.chat.id,
             document=output_file_trimmed,
             progress=progress_for_pyrogram,
-            progress_args=("Upload", uploading_message)
+            progress_args=(uploading_message, "Upload", start_time)
         )
         await uploading_message.edit_text("Upload complete.")
     else:
