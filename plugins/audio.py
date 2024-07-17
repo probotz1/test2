@@ -50,7 +50,7 @@ async def handle_remove_audio(client, message):
     media = message.reply_to_message.video or message.reply_to_message.document
     downloading_message = await message.reply_text("Downloading media...")
 
-    file_path = await client.download_media(media, progress=progress_for_pyrogram, progress_args=("Download", message))
+    file_path = await client.download_media(media, progress=progress_for_pyrogram, progress_args=("Download", downloading_message))
     await downloading_message.edit_text("Download complete. Processing...")
 
     output_file_no_audio = tempfile.mktemp(suffix=".mp4")
@@ -86,7 +86,7 @@ async def handle_trim_video(client, message):
     media = message.reply_to_message.video or message.reply_to_message.document
     downloading_message = await message.reply_text("Downloading media...")
 
-    file_path = await client.download_media(media, progress=progress_for_pyrogram, progress_args=("Download", message))
+    file_path = await client.download_media(media, progress=progress_for_pyrogram, progress_args=("Download", downloading_message))
     await downloading_message.edit_text("Download complete. Processing...")
 
     output_file_trimmed = tempfile.mktemp(suffix=".mp4")
