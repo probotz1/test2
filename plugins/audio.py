@@ -47,10 +47,13 @@ async def handle_remove_audio(client, message):
         return
 
     media = message.reply_to_message.video or message.reply_to_message.document
-    downloading_message = await message.reply_text("Downloading media...")
+    media = update.reply_to_message.video or update.reply_to_message.document
 
-    file_path = await client.download_media(media)
-    await downloading_message.edit_text("Download complete. Processing...")
+    ms = await update.message.edit("`Trying To Downloading`")    
+    try:
+     	path = await bot.download_media(message=file, file_name=file_path, progress=progress_for_pyrogram,progress_args=("`Download Started....`", ms, time.time()))                    
+    except Exception as e:
+     	return await ms.edit(e)
 
     output_file_no_audio = tempfile.mktemp(suffix=".mp4")
 
