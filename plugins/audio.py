@@ -25,7 +25,13 @@ def run_command(command):
         return False, e.stderr.decode('utf-8')
 
 def remove_audio(input_file, output_file):
-    command = ['ffmpeg', '-i', input_file, '-c', 'copy', '-an', output_file]
+    command = [
+        'ffmpeg', '-i', input_file,
+        '-c:v', 'copy',  # Copy the video stream without re-encoding
+        '-an',  # Remove the audio stream
+        '-metadata', 'creation_time=now',  # Update metadata to fix duration issue
+        output_file
+    ]
     success, _ = run_command(command)
     return success
 
