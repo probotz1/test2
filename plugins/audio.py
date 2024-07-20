@@ -5,6 +5,7 @@ import sys
 import math
 import time
 import asyncio
+import logging 
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters
@@ -16,12 +17,15 @@ app = Flask(__name__)
 # Thread pool for async processing
 executor = ThreadPoolExecutor(max_workers=4)
 
+# Configure logging
+logging.basicConfig(filename='app.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
 def run_command(command):
     try:
         result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return True, result.stdout.decode('utf-8')
     except subprocess.CalledProcessError as e:
-        print(f"Error: {e.stderr.decode('utf-8')}", file=sys.stderr)
+        logging.error(f"Error executing command: {e.stderr.decode('utf-8')}")
         return False, e.stderr.decode('utf-8')
 
 def remove_audio(input_file, output_file):
