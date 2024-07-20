@@ -34,7 +34,8 @@ def trim_video(input_file, start_time, end_time, output_file):
         'ffmpeg', '-i', input_file,
         '-ss', start_time,
         '-to', end_time,
-        '-c', 'copy',
+        '-c:v', 'libx264', '-c:a', 'aac',  # Use libx264 for video and aac for audio encoding
+        '-strict', 'experimental',  # Ensure compatibility
         output_file
     ]
     success, _ = run_command(command)
@@ -62,6 +63,8 @@ async def handle_remove_audio(client, message):
         await message.reply_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
+    os.remove(file_path)
+    os.remove(output_file_no_audio)
 
 @Client.on_message(filters.command("trim_video"))
 async def handle_trim_video(client, message):
@@ -92,6 +95,8 @@ async def handle_trim_video(client, message):
         await message.reply_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
+    os.remove(file_path)
+    os.remove(output_file_trimmed)
 
 @app.route('/process', methods=['POST'])
 def process_request():
