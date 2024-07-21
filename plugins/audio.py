@@ -29,14 +29,10 @@ def run_command(command):
         return False, e.stderr.decode('utf-8')
 
 def remove_audio(input_file, output_file):
-    command = [
-        'ffmpeg', '-i', input_file,
-        '-c:v', 'copy',  # Copy the video stream without re-encoding
-        '-an',  # Remove the audio stream
-        '-metadata', 'creation_time=now',  # Update metadata to fix duration issue
-        output_file
-    ]
-    success, _ = run_command(command)
+    command = ['ffmpeg', '-i', input_file, '-vcodec', 'copy', '-an', output_file]
+    success, output = run_command(command)
+    if not success:
+        print(f"Failed to remove audio: {output}", file=sys.stderr)
     return success
 
 def trim_video(input_file, start_time, end_time, output_file):
@@ -44,11 +40,12 @@ def trim_video(input_file, start_time, end_time, output_file):
         'ffmpeg', '-i', input_file,
         '-ss', start_time,
         '-to', end_time,
-        '-c:v', 'libx264', '-c:a', 'aac',  # Use libx264 for video and aac for audio encoding
-        '-strict', 'experimental',  # Ensure compatibility
+        '-c:v', 'copy', '-c:a', 'copy',
         output_file
     ]
-    success, _ = run_command(command)
+    success, output = run_command(command)
+    if not success:
+        print(f"Failed to trim video: {output}", file=sys.stderr)
     return success
 
 @Client.on_message(filters.command("remove_audio"))
@@ -73,8 +70,6 @@ async def handle_remove_audio(client, message):
         await message.reply_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
-    os.remove(file_path)
-    os.remove(output_file_no_audio)
 
 @Client.on_message(filters.command("trim_video"))
 async def handle_trim_video(client, message):
