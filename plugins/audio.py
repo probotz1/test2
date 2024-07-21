@@ -62,7 +62,7 @@ async def handle_file(client, message):
     # Prompt user to enter a new name
     await message.reply_text("Please enter a new name for the file:")
 
-@Client.on_message(filters.text & ~filters.command)
+@Client.on_message(filters.text & filters.command)
 async def handle_new_name(client, message):
     user_id = message.from_user.id
     if user_id in user_data and 'file_id' in user_data[user_id]:
