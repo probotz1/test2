@@ -40,12 +40,11 @@ def trim_video(input_file, start_time, end_time, output_file):
         'ffmpeg', '-i', input_file,
         '-ss', start_time,
         '-to', end_time,
-        '-c:v', 'copy', '-c:a', 'copy',
+        '-c:v', 'libx264', '-crf', '23', '-preset', 'fast',  # Video encoding options
+        '-c:a', 'aac', '-b:a', '128k',  # Audio encoding options
         output_file
     ]
-    success, output = run_command(command)
-    if not success:
-        print(f"Failed to trim video: {output}", file=sys.stderr)
+    success, _ = run_command(command)
     return success
 
 @Client.on_message(filters.command("remove_audio"))
