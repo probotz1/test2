@@ -29,10 +29,8 @@ def run_command(command):
         return False, e.stderr.decode('utf-8')
 
 def remove_audio(input_file, output_file):
-    command = ['ffmpeg', '-i', input_file, '-vcodec', 'copy', '-an', output_file]
-    success, output = run_command(command)
-    if not success:
-        print(f"Failed to remove audio: {output}", file=sys.stderr)
+    command = ['ffmpeg', '-i', input_file, '-c', 'copy', '-an', output_file]
+    success, _ = run_command(command)
     return success
 
 def trim_video(input_file, start_time, end_time, output_file):
@@ -40,11 +38,13 @@ def trim_video(input_file, start_time, end_time, output_file):
         'ffmpeg', '-i', input_file,
         '-ss', start_time,
         '-to', end_time,
-        '-c:v', 'libx264', '-crf', '23', '-preset', 'fast',  # Video encoding options
-        '-c:a', 'aac', '-b:a', '128k',  # Audio encoding options
+        '-c', 'copy',  # copy both audio and video
+        '-avoid_negative_ts', 'make_zero',  # avoid negative timestamps
         output_file
     ]
-    success, _ = run_command(command)
+    success, output = run_command(command)
+    if not success:
+        print(f"Failed to trim video: {output}", file=sys.stderr)
     return success
 
 @Client.on_message(filters.command("remove_audio"))
