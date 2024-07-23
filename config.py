@@ -1,5 +1,7 @@
 import os, time
 
+AUTH_USERS = set(int(x) for x in os.environ.get("AUTH_USERS", "6299192020").split())
+
 class Config(object):
     #Audio-_edit_bot client Config 
     API_ID = os.getenv("API_ID", "21740783")
@@ -7,7 +9,7 @@ class Config(object):
     BOT_TOKEN = os.getenv("BOT_TOKEN", "7496680438:AAHyEZDGnIoARpfywrzQOhB27un9pja49p4")
 
     #port to run web server
-    PORT = int(os.getenv('PORT', "8080"))
+    PORT = int(os.getenv('PORT', "8050"))
 
     # database config
     DB_NAME = os.environ.get("DB_NAME","Speedwolf1")     
