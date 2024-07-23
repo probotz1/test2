@@ -1,10 +1,5 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# @trojanzhex
-
-
 from pyrogram import filters
-from pyrogram import Client as trojanz
+from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from config import Config
@@ -16,7 +11,7 @@ from helpers.download import download_file, DATA
 from helpers.ffmpeg import extract_audio, extract_subtitle
 
 
-@trojanz.on_callback_query()
+@Client.on_callback_query()
 async def cb_handler(client, query):
 
     if query.data == "start_data":
