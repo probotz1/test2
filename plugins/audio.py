@@ -22,8 +22,6 @@ executor = ThreadPoolExecutor(max_workers=4)
 # Configure logging
 logging.basicConfig(filename='app.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
-bot = Client('my_bot', api_id=Config.API_ID, api_hash=Config.API_HASH, bot_token=Config.BOT_TOKEN)
-
 def run_command(command):
     try:
         result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -53,7 +51,7 @@ def trim_video(input_file, start_time, end_time, output_file):
         logging.error(f"Failed to trim video: {output}")
     return success
 
-@bot.on_message(filters.video | filters.document)
+@Client.on_message(filters.video | filters.document)
 async def ask_action(client, message):
     keyboard = [
         [
@@ -64,7 +62,7 @@ async def ask_action(client, message):
     reply_markup = types.InlineKeyboardMarkup(keyboard)
     await message.reply_text("What do you want to do?", reply_markup=reply_markup)
 
-@bot.on_callback_query(filters.regex(r"remove_audio|trim_video"))
+@Client.on_callback_query(filters.regex(r"remove_audio|trim_video"))
 async def handle_callback_query(client, callback_query):
     action = callback_query.data
     message = callback_query.message
@@ -104,7 +102,7 @@ async def handle_callback_query(client, callback_query):
 
     os.remove(file_path)
 
-@bot.on_message(filters.command("trim_video"))
+@Client.on_message(filters.command("trim_video"))
 async def handle_trim_video(client, message):
     args = message.command
     if len(args) != 3:
@@ -157,7 +155,3 @@ def process_request():
         return jsonify({"status": "failure", "message": "Processing failed"}), 500
 
     return jsonify({"status": "success", "output_file": output_file})
-
-if __name__ == '__main__':
-    bot.start()
-    app.run(debug=True)
