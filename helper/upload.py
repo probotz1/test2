@@ -3,8 +3,8 @@ import time
 from hachoir.parser import createParser
 from hachoir.metadata import extractMetadata
 
-from helpers.tools import clean_up
-from helpers.progress import progress_func
+from helper.tools import clean_up
+from helper.progress import progress_func
 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
