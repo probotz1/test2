@@ -3,6 +3,7 @@ from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from config import Config
+from plugins import start
 
 from helper.progress import PRGRS
 from helper.tools import clean_up
