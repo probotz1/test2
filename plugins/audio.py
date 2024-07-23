@@ -10,6 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from pyrogram import Client, filters
 from plugins import start
+from plugins import extractor 
 from pyrogram.errors import FloodWait
 
 app = Flask(__name__)
