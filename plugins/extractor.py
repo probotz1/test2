@@ -2,6 +2,7 @@ from pyrogram import filters
 from pyrogram import Client
 from plugins import start 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from plugins.audio import remove_audio, trim_video
 
 from config import Config
 
