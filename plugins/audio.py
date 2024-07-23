@@ -29,12 +29,12 @@ def run_command(command):
         logging.error(f"Error executing command: {e.stderr.decode('utf-8')}")
         return False, e.stderr.decode('utf-8')
 
-def remove_audio(input_file, output_file):
+async def remove_audio(input_file, output_file):
     command = ['ffmpeg', '-i', input_file, '-c', 'copy', '-an', output_file]
     success, _ = run_command(command)
     return success
 
-def trim_video(input_file, start_time, end_time, output_file):
+async def trim_video(input_file, start_time, end_time, output_file):
     command = [
         'ffmpeg', '-i', input_file,
         '-ss', start_time,
