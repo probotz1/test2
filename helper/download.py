@@ -2,8 +2,8 @@ import time
 import json
 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from helpers.progress import progress_func
-from helpers.tools import execute, clean_up
+from helper.progress import progress_func
+from helper.tools import execute, clean_up
 
 DATA = {}
 
