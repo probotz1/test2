@@ -1,5 +1,5 @@
-from helpers.tools import execute, clean_up
-from helpers.upload import upload_audio, upload_subtitle
+from helper.tools import execute, clean_up
+from helper.upload import upload_audio, upload_subtitle
 
 async def extract_audio(client, message, data):
     await message.edit_text("Extracting Stream from file...")
