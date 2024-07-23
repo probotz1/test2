@@ -3,7 +3,6 @@ from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from config import Config
-from script import Script
 
 from helpers.progress import PRGRS
 from helpers.tools import clean_up
@@ -16,52 +15,24 @@ async def cb_handler(client, query):
 
     if query.data == "start_data":
         await query.answer()
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("HELP", callback_data="help_data"),
-                InlineKeyboardButton("ABOUT", callback_data="about_data")],
-            [InlineKeyboardButton("⭕️ JOIN OUR CHANNEL ⭕️", url="https://t.me/kashirbots")]
-        ])
+        keyboard = InlineKeyboardMarkup([[
+             InlineKeyboardButton("⚔️Update Channel", url="https://t.me/Anime_Warrior_Tamil"),
+             InlineKeyboardButton("🛡️Support Group", url="https://t.me/+NITVxLchQhYzNGZl")
+             ],[
+             InlineKeyboardButton("📢Help", callback_data="help"),
+             InlineKeyboardButton("⚡About", callback_data="about")
+             ],[
+             InlineKeyboardButton("❌Close", callback_data="close")
+         ]])
 
         await query.message.edit_text(
-            Script.START_MSG.format(query.from_user.mention),
+            text=Txt.START_TXT.format(query.from_user.mention),
             reply_markup=keyboard,
             disable_web_page_preview=True
         )
         return
 
-
-    elif query.data == "help_data":
-        await query.answer()
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("BACK", callback_data="start_data"),
-                InlineKeyboardButton("ABOUT", callback_data="about_data")],
-            [InlineKeyboardButton("⭕️ SUPPORT ⭕️", url="https://t.me/mr_sahbe")]
-        ])
-
-        await query.message.edit_text(
-            Script.HELP_MSG,
-            reply_markup=keyboard,
-            disable_web_page_preview=True
-        )
-        return
-
-
-    elif query.data == "about_data":
-        await query.answer()
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("BACK", callback_data="help_data"),
-                InlineKeyboardButton("START", callback_data="start_data")],
-            [InlineKeyboardButton("SOURCE CODE", url="https://github.com/github.com/kashir-bots/streamextractorbot")]
-        ])
-
-        await query.message.edit_text(
-            Script.ABOUT_MSG,
-            reply_markup=keyboard,
-            disable_web_page_preview=True
-        )
-        return
-
-
+    
     elif query.data == "download_file":
         await query.answer()
         await query.message.delete()
@@ -82,15 +53,6 @@ async def cb_handler(client, query):
                 "Processing your file...",
                 show_alert=True
             )
-
-
-    elif query.data == "close": 
-        await query.message.delete()  
-        await query.answer(
-                "Cancelled...",
-                show_alert=True
-            ) 
-
 
     elif query.data.startswith('audio'):
         await query.answer()
