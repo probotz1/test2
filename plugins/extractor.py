@@ -28,12 +28,3 @@ async def confirm_dwnld(client, message):
             "Invalid Media",
             quote=True
         )
-
-    elif data == "close":
-        try:
-            await query.message.delete()
-            await query.message.reply_to_message.delete()
-            await query.message.continue_propagation()
-        except:
-            await query.message.delete()
-            await query.message.continue_propagation()
