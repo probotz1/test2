@@ -18,8 +18,8 @@ async def confirm_dwnld(client, message):
             quote=True,
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton(text="DOWNLOAD and PROCESS", callback_data="download_file")],
-                [InlineKeyboardButton(text="Remove Audio🎧", callback_data="remove_audio")],
-                [InlineKeyboardButton(text="Trim Video ✂️", callback_data="trim_video")],
+                [InlineKeyboardButton(text="Remove Audio🎧", callback_data="handle_remove_audio")],
+                [InlineKeyboardButton(text="Trim Video ✂️", callback_data="handle_trim_video")],
                 [InlineKeyboardButton(text="CANCEL", callback_data="close")]
             ])
         )
