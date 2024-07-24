@@ -2,7 +2,7 @@ from pyrogram import filters
 from pyrogram import Client
 from plugins import start 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from plugins.audio import remove_audio, trim_video
+from plugins import audio 
 
 from config import Config
 
@@ -17,7 +17,7 @@ async def confirm_dwnld(client, message):
             "**What do you want me to do 🤔**",
             quote=True,
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton(text="DOWNLOAD and PROCESS", callback_data="download_file")],
+                [InlineKeyboardButton(text="Extract Audio 📢", callback_data="download_file")],
                 [InlineKeyboardButton(text="Remove Audio🎧", callback_data="handle_remove_audio")],
                 [InlineKeyboardButton(text="Trim Video ✂️", callback_data="handle_trim_video")],
                 [InlineKeyboardButton(text="CANCEL", callback_data="close")]
