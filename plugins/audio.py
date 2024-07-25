@@ -63,7 +63,6 @@ async def handle_remove_audio(client, message):
 
     file_path = await client.download_media(media)
     await downloading_message.edit_text("Download complete. Processing...")
-    await callback_query.message.delete()
 
     output_file_no_audio = tempfile.mktemp(suffix=".mp4")
 
@@ -95,7 +94,6 @@ async def handle_trim_video(client, message):
 
     file_path = await client.download_media(media)
     await downloading_message.edit_text("Download complete. Processing...")
-    await callback_query.message.delete()
 
     output_file_trimmed = tempfile.mktemp(suffix=".mp4")
 
