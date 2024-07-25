@@ -196,9 +196,6 @@ async def callback_handler(client, callback_query):
     elif data == "handle_trim_video":
         await callback_query.answer()
         await callback_query.message.reply_text("Please use the command in the format: /trim_video <start_time> <end_time>.\nExample: /trim_video 00:00:10 00:00:20")
-    elif data == "download_file":
-        await callback_query.answer()
-        await extractor.extract_audio(client, callback_query.message)
     elif data == "close":
         await callback_query.message.delete()
 
