@@ -63,6 +63,7 @@ async def handle_remove_audio(client, message):
 
     file_path = await client.download_media(media)
     await downloading_message.edit_text("Download complete. Processing...")
+    await callback_query.message.delete()
 
     output_file_no_audio = tempfile.mktemp(suffix=".mp4")
 
@@ -72,6 +73,7 @@ async def handle_remove_audio(client, message):
     if success:
         await client.send_document(chat_id=message.chat.id, document=output_file_no_audio)
         await message.reply_text("Upload complete.")
+        await callback_query.message.delete()
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
 
@@ -93,6 +95,7 @@ async def handle_trim_video(client, message):
 
     file_path = await client.download_media(media)
     await downloading_message.edit_text("Download complete. Processing...")
+    await callback_query.message.delete()
 
     output_file_trimmed = tempfile.mktemp(suffix=".mp4")
 
