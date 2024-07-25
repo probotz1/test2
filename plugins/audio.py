@@ -193,9 +193,11 @@ async def callback_handler(client, callback_query):
     if data == "handle_remove_audio":
         await callback_query.answer()
         await handle_remove_audio(client, callback_query.message)
+        await callback_query.message.delete()
     elif data == "handle_trim_video":
         await callback_query.answer()
         await callback_query.message.reply_text("Please use the command in the format: /trim_video <start_time> <end_time>.\nExample: /trim_video 00:00:10 00:00:20")
+        await callback_query.message.delete()
     elif data == "close":
         await callback_query.message.delete()
 
