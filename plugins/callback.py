@@ -45,10 +45,6 @@ async def cb_handler(client, query):
         await query.message.reply_text("Please use the command in the format: /trim_video <start_time> <end_time>.\nExample: /trim_video 00:00:10 00:00:20")
         await query.message.delete()
 
-    elif query.data == "handle_remove_audio":
-        await query.answer()
-        await handle_remove_audio(client, query.message)
-
     elif query.data == "progress_msg":
         try:
             msg = "Progress Details...\n\nCompleted : {current}\nTotal Size : {total}\nSpeed : {speed}\nProgress : {progress:.2f}%\nETA: {eta}"
