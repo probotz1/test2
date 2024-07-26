@@ -14,7 +14,6 @@ from helper.ffmpeg import extract_audio, extract_subtitle
 
 @Client.on_callback_query()
 async def cb_handler(client, query):
-    data = callback_query.data
 
     if query.data == "start_data":
         await query.answer()
@@ -41,9 +40,9 @@ async def cb_handler(client, query):
         await query.message.delete()
         await download_file(client, query.message)
 
-    elif data == "handle_remove_audio":
-        await callback_query.answer()
-        await handle_remove_audio(client, callback_query.message)
+    elif query.data == "handle_remove_audio":
+        await query.answer()
+        await handle_remove_audio(client, query.message)
         
     elif query.data == "handle_trim_video":
         await query.answer()
