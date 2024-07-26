@@ -127,7 +127,7 @@ def process_request():
 @Client.on_callback_query()  # Added callback handler
 async def cb_handler(client, query):
 
-    if query.data == "handle_remove_audio":
+    elif query.data == "handle_remove_audio":
         await query.answer()
         await handle_remove_audio(client, query.message)
         pass
