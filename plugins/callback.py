@@ -14,9 +14,9 @@ from helper.ffmpeg import extract_audio, extract_subtitle
 
 @Client.on_callback_query()
 async def callback_handler(client, callback_query):
-    query.data = callback_query.data
+    data = callback_query.data
 
-    if query.data == "start_data":
+    if data == "start_data":
         await query.answer()
         keyboard = InlineKeyboardMarkup([[
              InlineKeyboardButton("⚔️Update Channel", url="https://t.me/Anime_Warrior_Tamil"),
@@ -36,15 +36,15 @@ async def callback_handler(client, callback_query):
         return
 
     
-    elif query.data == "download_file":
-        await query.answer()
-        await query.message.delete()
+    elif data == "download_file":
+        await callback_query.answer()
+        await callback_query.message.delete()
         await download_file(client, query.message)
         
-    elif query.data == "handle_trim_video":
-        await query.answer()
-        await query.message.reply_text("Please use the command in the format: /trim_video <start_time> <end_time>.\nExample: /trim_video 00:00:10 00:00:20")
-        await query.message.delete()
+    elif data == "handle_trim_video":
+        await callback_query.answer()
+        await callback_query.message.reply_text("Please use the command in the format: /trim_video <start_time> <end_time>.\nExample: /trim_video 00:00:10 00:00:20")
+        await callback_query.message.delete()
 
     elif query.data == "progress_msg":
         try:
