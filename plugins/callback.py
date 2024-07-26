@@ -4,6 +4,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from config import Config
 from plugins import start
+from plugins import audio
 
 from helper.progress import PRGRS
 from helper.tools import clean_up
@@ -39,12 +40,12 @@ async def cb_handler(client, query):
         await query.message.delete()
         await download_file(client, query.message)
  
-    elif data == "handle_remove_audio":
+    elif query.data == "handle_remove_audio":
         await query.answer()
         await handle_remove_audio(client, query.message)
         await query.message.delete()
         
-    elif data == "handle_trim_video":
+    elif query.data == "handle_trim_video":
         await query.answer()
         await query.message.reply_text("Please use the command in the format: /trim_video <start_time> <end_time>.\nExample: /trim_video 00:00:10 00:00:20")
         await query.message.delete()
