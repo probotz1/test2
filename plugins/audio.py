@@ -191,7 +191,10 @@ async def process_audio_trim(client, message):
 async def callback_handler(client, callback_query):
     data = callback_query.data
 
-    if data == "handle_remove_audio":
+    if data == "download_file":
+        await callback_query.answer()
+        await extractor.extract_audio(client, callback_query.message)
+    elif data == "handle_remove_audio":
         await callback_query.answer()
         await handle_remove_audio(client, callback_query.message)
         await callback_query.message.delete()
