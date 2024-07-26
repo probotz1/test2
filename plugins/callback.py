@@ -8,6 +8,7 @@ from plugins import start
 from helper.progress import PRGRS
 from helper.tools import clean_up
 from helper.download import download_file, DATA
+from plugins.audio import handle_trim_video, handle_remove_audio
 from helper.ffmpeg import extract_audio, extract_subtitle
 
 
@@ -38,24 +39,16 @@ async def cb_handler(client, query):
         await query.answer()
         await query.message.delete()
         await download_file(client, query.message)
-        @Client.on_callback_query()  # Added callback handler
-async def callback_handler(client, callback_query):
-    data = callback_query.data
-
-    if data == "download_file":
-        await callback_query.answer()
-        await extractor.extract_audio(client, callback_query.message)
+ 
     elif data == "handle_remove_audio":
-        await callback_query.answer()
-        await handle_remove_audio(client, callback_query.message)
-        await callback_query.message.delete()
+        await query.answer()
+        await handle_remove_audio(client, query.message)
+        await query.message.delete()
+        
     elif data == "handle_trim_video":
-        await callback_query.answer()
-        await callback_query.message.reply_text("Please use the command in the format: /trim_video <start_time> <end_time>.\nExample: /trim_video 00:00:10 00:00:20")
-        await callback_query.message.delete()
-    elif data == "close":
-        await callback_query.message.delete()
-
+        await query.answer()
+        await query.message.reply_text("Please use the command in the format: /trim_video <start_time> <end_time>.\nExample: /trim_video 00:00:10 00:00:20")
+        await query.message.delete()
 
     elif query.data == "progress_msg":
         try:
