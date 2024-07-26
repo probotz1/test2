@@ -8,7 +8,6 @@ from plugins import start
 from helper.progress import PRGRS
 from helper.tools import clean_up
 from helper.download import download_file, DATA
-from plugins.audio import handle_trim_video, handle_remove_audio
 from helper.ffmpeg import extract_audio, extract_subtitle
 
 
