@@ -123,12 +123,3 @@ def process_request():
         return jsonify({"status": "failure", "message": "Processing failed"}), 500
 
     return jsonify({"status": "success", "output_file": output_file})
-
-@Client.on_callback_query()  # Added callback handler
-async def cb_handler(client, query):
-
-    elif query.data == "handle_remove_audio":
-        await query.answer()
-        await handle_remove_audio(client, query.message)
-        pass
-
