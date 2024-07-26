@@ -13,9 +13,10 @@ from helper.ffmpeg import extract_audio, extract_subtitle
 
 
 @Client.on_callback_query()
-async def cb_handler(client, query):
+async def callback_handler(client, callback_query):
+    query.data = callback_query.data
 
-    if data == "start_data":
+    if query.data == "start_data":
         await query.answer()
         keyboard = InlineKeyboardMarkup([[
              InlineKeyboardButton("⚔️Update Channel", url="https://t.me/Anime_Warrior_Tamil"),
