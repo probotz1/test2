@@ -48,6 +48,17 @@ def trim_video(input_file, start_time, end_time, output_file):
         print(f"Failed to trim video: {output}", file=sys.stderr)
     return success
 
+async def get_video_details(file_path):
+    command = ['ffprobe', '-v', 'error', '-show_entries', 'format=duration,size', '-of', 'default=noprint_wrappers=1', file_path]
+    success, output = run_command(command)
+    if success:
+        details = {}
+        for line in output.splitlines():
+            key, value = line.split('=')
+            details[key] = value
+        return details
+    return None
+
 @Client.on_message(filters.command("remove_audio"))
 async def handle_remove_audio(client, message):
     if not message.reply_to_message or not (message.reply_to_message.video or message.reply_to_message.document):
@@ -67,7 +78,17 @@ async def handle_remove_audio(client, message):
     success = await loop.run_in_executor(executor, remove_audio, file_path, output_file_no_audio)
 
     if success:
-        await client.send_document(chat_id=message.chat.id, document=output_file_no_audio)
+        details = await get_video_details(output_file_no_audio)
+        if details:
+            duration = details.get('duration', 'Unknown')
+            size = details.get('size', 'Unknown')
+            size_mb = round(int(size) / (1024 * 1024), 2)
+            duration_sec = round(float(duration))
+            caption = f"Here's your cleaned video file. Duration: {duration_sec} seconds. Size: {size_mb} MB"
+        else:
+            caption = "Here's your cleaned video file."
+
+        await client.send_video(chat_id=message.chat.id, video=output_file_no_audio, caption=caption)
         await message.reply_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
@@ -101,7 +122,17 @@ async def handle_trim_video(client, message):
     success = future.result()
 
     if success:
-        await client.send_document(chat_id=message.chat.id, document=output_file_trimmed)
+        details = await get_video_details(output_file_trimmed)
+        if details:
+            duration = details.get('duration', 'Unknown')
+            size = details.get('size', 'Unknown')
+            size_mb = round(int(size) / (1024 * 1024), 2)
+            duration_sec = round(float(duration))
+            caption = f"Here's your trimmed video file. Duration: {duration_sec} seconds. Size: {size_mb} MB"
+        else:
+            caption = "Here's your trimmed video file."
+
+        await client.send_video(chat_id=message.chat.id, video=output_file_trimmed, caption=caption)
         await message.reply_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
