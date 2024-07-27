@@ -44,7 +44,7 @@ async def cb_handler(client, query):
 
     elif data == "handle_remove_audio":
         await query.answer()
-        await handle_remove_audio(client, query.message.reply_to_message)
+        await handle_remove_audio(client, query.message)
         
     elif data == "handle_trim_video":
         await query.answer()
