@@ -30,7 +30,7 @@ def run_command(command):
         return False, e.stderr.decode('utf-8')
 
 def remove_audio(input_file, output_file):
-    command = ['ffmpeg', '-i', input_file, '-c:v', 'copy', '-an', output_file]
+    command = ['ffmpeg', '-i', input_file, '-c:v', 'copy', '-an', '-map_metadata', '0', '-movflags', 'use_metadata_tags', output_file]
     success, _ = run_command(command)
     return success
 
@@ -41,6 +41,7 @@ def trim_video(input_file, start_time, end_time, output_file):
         '-to', end_time,
         '-c:v', 'copy',  # copy video stream
         '-c:a', 'copy',  # copy audio stream
+        '-map_metadata', '0', '-movflags', 'use_metadata_tags',
         output_file
     ]
     success, output = run_command(command)
