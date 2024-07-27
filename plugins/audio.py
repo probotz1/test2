@@ -60,7 +60,8 @@ async def handle_remove_audio(client, message):
     file_path = await client.download_media(media)
     await downloading_message.edit_text("Download complete. Processing...")
 
-    output_file_no_audio = tempfile.mktemp(suffix=".mp4")
+    base_name = os.path.splitext(os.path.basename(file_path))[0]
+    output_file_no_audio = tempfile.mktemp(suffix=f"_{base_name}_noaudio.mp4")
 
     loop = asyncio.get_event_loop()
     success = await loop.run_in_executor(executor, remove_audio, file_path, output_file_no_audio)
@@ -93,7 +94,8 @@ async def handle_trim_video(client, message):
     file_path = await client.download_media(media)
     await downloading_message.edit_text("Download complete. Processing...")
 
-    output_file_trimmed = tempfile.mktemp(suffix=".mp4")
+    base_name = os.path.splitext(os.path.basename(file_path))[0]
+    output_file_trimmed = tempfile.mktemp(suffix=f"_{base_name}_trimmed.mp4")
 
     future = executor.submit(trim_video, file_path, start_time, end_time, output_file_trimmed)
     success = future.result()
@@ -103,6 +105,7 @@ async def handle_trim_video(client, message):
         await message.reply_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
+
     os.remove(file_path)
     os.remove(output_file_trimmed)
 
