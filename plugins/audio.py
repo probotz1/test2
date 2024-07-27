@@ -62,14 +62,17 @@ async def handle_remove_audio(client, message):
 
     output_file_no_audio = tempfile.mktemp(suffix=".mp4")
 
-    future = executor.submit(remove_audio, file_path, output_file_no_audio)
-    success = future.result()
+    loop = asyncio.get_event_loop()
+    success = await loop.run_in_executor(executor, remove_audio, file_path, output_file_no_audio)
 
     if success:
         await client.send_document(chat_id=message.chat.id, document=output_file_no_audio)
         await message.reply_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
+
+    os.remove(file_path)
+    os.remove(output_file_no_audio)
 
 @Client.on_message(filters.command("trim_video"))
 async def handle_trim_video(client, message):
