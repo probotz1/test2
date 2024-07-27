@@ -30,7 +30,7 @@ def run_command(command):
         return False, e.stderr.decode('utf-8')
 
 def remove_audio(input_file, output_file):
-    command = ['ffmpeg', '-i', input_file, '-c', 'copy', '-an', output_file]
+    command = ['ffmpeg', '-i', input_file, '-c:v', 'copy', '-an', output_file]
     success, _ = run_command(command)
     return success
 
@@ -39,8 +39,8 @@ def trim_video(input_file, start_time, end_time, output_file):
         'ffmpeg', '-i', input_file,
         '-ss', start_time,
         '-to', end_time,
-        '-c', 'copy',  # copy both audio and video
-        '-avoid_negative_ts', 'make_zero',  # avoid negative timestamps
+        '-c:v', 'copy',  # copy video stream
+        '-c:a', 'copy',  # copy audio stream
         output_file
     ]
     success, output = run_command(command)
@@ -58,6 +58,17 @@ async def get_video_details(file_path):
             details[key] = value
         return details
     return None
+
+async def add_thumbnail(video_file, thumbnail_file, output_file):
+    command = [
+        'ffmpeg', '-i', video_file, '-i', thumbnail_file,
+        '-map', '0', '-map', '1', '-c', 'copy', '-disposition:1', 'attached_pic',
+        output_file
+    ]
+    success, output = run_command(command)
+    if not success:
+        print(f"Failed to add thumbnail: {output}", file=sys.stderr)
+    return success
 
 @Client.on_message(filters.command("remove_audio"))
 async def handle_remove_audio(client, message):
@@ -78,23 +89,31 @@ async def handle_remove_audio(client, message):
     success = await loop.run_in_executor(executor, remove_audio, file_path, output_file_no_audio)
 
     if success:
-        details = await get_video_details(output_file_no_audio)
-        if details:
-            duration = details.get('duration', 'Unknown')
-            size = details.get('size', 'Unknown')
-            size_mb = round(int(size) / (1024 * 1024), 2)
-            duration_sec = round(float(duration))
-            caption = f"Here's your cleaned video file. Duration: {duration_sec} seconds. Size: {size_mb} MB"
-        else:
-            caption = "Here's your cleaned video file."
+        thumbnail_path = '/mnt/data/file-NrrmSIDxPn1QlvtIROB94pll'
+        output_with_thumbnail = tempfile.mktemp(suffix=f"_{base_name}_noaudio_thumb.mp4")
+        success = await loop.run_in_executor(executor, add_thumbnail, output_file_no_audio, thumbnail_path, output_with_thumbnail)
+        if success:
+            details = await get_video_details(output_with_thumbnail)
+            if details:
+                duration = details.get('duration', 'Unknown')
+                size = details.get('size', 'Unknown')
+                size_mb = round(int(size) / (1024 * 1024), 2)
+                duration_sec = round(float(duration))
+                caption = f"Here's your cleaned video file. Duration: {duration_sec} seconds. Size: {size_mb} MB"
+            else:
+                caption = "Here's your cleaned video file."
 
-        await client.send_video(chat_id=message.chat.id, video=output_file_no_audio, caption=caption)
-        await message.reply_text("Upload complete.")
+            await client.send_video(chat_id=message.chat.id, video=output_with_thumbnail, caption=caption)
+            await message.reply_text("Upload complete.")
+        else:
+            await message.reply_text("Failed to add thumbnail. Please try again later.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
 
     os.remove(file_path)
     os.remove(output_file_no_audio)
+    if os.path.exists(output_with_thumbnail):
+        os.remove(output_with_thumbnail)
 
 @Client.on_message(filters.command("trim_video"))
 async def handle_trim_video(client, message):
@@ -122,23 +141,31 @@ async def handle_trim_video(client, message):
     success = future.result()
 
     if success:
-        details = await get_video_details(output_file_trimmed)
-        if details:
-            duration = details.get('duration', 'Unknown')
-            size = details.get('size', 'Unknown')
-            size_mb = round(int(size) / (1024 * 1024), 2)
-            duration_sec = round(float(duration))
-            caption = f"Here's your trimmed video file. Duration: {duration_sec} seconds. Size: {size_mb} MB"
-        else:
-            caption = "Here's your trimmed video file."
+        thumbnail_path = '/mnt/data/file-NrrmSIDxPn1QlvtIROB94pll'
+        output_with_thumbnail = tempfile.mktemp(suffix=f"_{base_name}_trimmed_thumb.mp4")
+        success = await loop.run_in_executor(executor, add_thumbnail, output_file_trimmed, thumbnail_path, output_with_thumbnail)
+        if success:
+            details = await get_video_details(output_with_thumbnail)
+            if details:
+                duration = details.get('duration', 'Unknown')
+                size = details.get('size', 'Unknown')
+                size_mb = round(int(size) / (1024 * 1024), 2)
+                duration_sec = round(float(duration))
+                caption = f"Here's your trimmed video file. Duration: {duration_sec} seconds. Size: {size_mb} MB"
+            else:
+                caption = "Here's your trimmed video file."
 
-        await client.send_video(chat_id=message.chat.id, video=output_file_trimmed, caption=caption)
-        await message.reply_text("Upload complete.")
+            await client.send_video(chat_id=message.chat.id, video=output_with_thumbnail, caption=caption)
+            await message.reply_text("Upload complete.")
+        else:
+            await message.reply_text("Failed to add thumbnail. Please try again later.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
 
     os.remove(file_path)
     os.remove(output_file_trimmed)
+    if os.path.exists(output_with_thumbnail):
+        os.remove(output_with_thumbnail)
 
 @app.route('/process', methods=['POST'])
 def process_request():
