@@ -59,7 +59,7 @@ async def get_video_details(file_path):
         return details
     return None
 
-async def add_thumbnail(video_file, thumbnail_file, output_file):
+def add_thumbnail(video_file, thumbnail_file, output_file):
     command = [
         'ffmpeg', '-i', video_file, '-i', thumbnail_file,
         '-map', '0', '-map', '1', '-c', 'copy', '-disposition:1', 'attached_pic',
