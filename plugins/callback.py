@@ -5,7 +5,7 @@ from helper.progress import PRGRS
 from helper.tools import clean_up
 from helper.download import download_file, DATA
 from helper.ffmpeg import extract_audio, extract_subtitle
-from bot import handle_remove_audio  # Ensure this import matches your structure
+from plugins.audio import handle_remove_audio  # Ensure this import matches your structure
 import logging
 
 logging.basicConfig(filename='app.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
