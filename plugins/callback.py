@@ -52,13 +52,19 @@ async def cb_handler(client, query):
         await query.message.reply_text("Please use the command in the format: /trim_video <start_time> <end_time>.\nExample: /trim_video 00:00:10 00:00:20")
         await query.message.delete()
 
-    elif data == "progress_msg":
+    elif query.data == "progress_msg":
         try:
-            progress_data = PRGRS[f"{query.message.chat.id}_{query.message.message_id}"]
-            msg = f"Progress Details...\n\nCompleted : {progress_data['current']}\nTotal Size : {progress_data['total']}\nSpeed : {progress_data['speed']}\nProgress : {progress_data['progress']:.2f}%\nETA: {progress_data['eta']}"
-            await query.answer(msg, show_alert=True)
-        except KeyError:
-            await query.answer("Processing your file...", msg, show_alert=True)
+            msg = "Progress Details...\n\nCompleted : {current}\nTotal Size : {total}\nSpeed : {speed}\nProgress : {progress:.2f}%\nETA: {eta}"
+            await query.answer(
+                msg.format(
+                    **PRGRS[f"{query.message.chat.id}_{query.message.message_id}"]
+                ),
+                show_alert=True
+            )
+        except:
+            await query.answer(
+                "Processing your file...", msg,
+                show_alert=True
 
     elif data.startswith('audio'):
         await query.answer()
