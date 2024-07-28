@@ -45,6 +45,7 @@ async def cb_handler(client, query):
     elif data == "handle_remove_audio":
         await query.answer()
         await handle_remove_audio(client, query.message)
+        await query.message.delete()
         
     elif data == "handle_trim_video":
         await query.answer()
@@ -57,7 +58,7 @@ async def cb_handler(client, query):
             msg = f"Progress Details...\n\nCompleted : {progress_data['current']}\nTotal Size : {progress_data['total']}\nSpeed : {progress_data['speed']}\nProgress : {progress_data['progress']:.2f}%\nETA: {progress_data['eta']}"
             await query.answer(msg, show_alert=True)
         except KeyError:
-            await query.answer("Processing your file...", show_alert=True)
+            await query.answer("Processing your file...", msg, show_alert=True)
 
     elif data.startswith('audio'):
         await query.answer()
