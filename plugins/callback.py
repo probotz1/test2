@@ -65,6 +65,7 @@ async def cb_handler(client, query):
             await query.answer(
                 "Processing your file...", msg,
                 show_alert=True
+            )
 
     elif data.startswith('audio'):
         await query.answer()
