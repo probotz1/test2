@@ -12,7 +12,7 @@ from pyrogram import Client, filters
 from plugins import start
 from plugins import extractor 
 from pyrogram.errors import FloodWait
-
+from helper.upload
 app = Flask(__name__)
 
 # Thread pool for async processing
