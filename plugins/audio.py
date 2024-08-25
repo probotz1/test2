@@ -15,6 +15,7 @@ from pyrogram.errors import FloodWait
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from hachoir.parser import createParser
 from hachoir.metadata import extractMetadata
+from helper.progress import progress_func
 
 app = Flask(__name__)
 
