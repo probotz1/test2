@@ -12,6 +12,9 @@ from pyrogram import Client, filters
 from plugins import start
 from plugins import extractor 
 from pyrogram.errors import FloodWait
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from hachoir.parser import createParser
+from hachoir.metadata import extractMetadata
 
 app = Flask(__name__)
 
@@ -60,6 +63,57 @@ async def get_video_details(file_path):
         return details
     return None
 
+async def upload_video(client, message, file_loc):
+
+    msg = await message.edit_text(
+        text="**Uploading video...**",
+        reply_markup=InlineKeyboardMarkup(
+            [[InlineKeyboardButton(text="Progress", callback_data="progress_msg")]])
+    )
+
+    thumb = None
+    duration = 0
+    width = 0
+    height = 0
+    title = None
+
+    metadata = extractMetadata(createParser(file_loc))
+    if metadata:
+        if metadata.has("duration"):
+            duration = metadata.get("duration").seconds
+        if metadata.has("width"):
+            width = metadata.get("width")
+        if metadata.has("height"):
+            height = metadata.get("height")
+        if metadata.has("title"):
+            title = metadata.get("title")
+
+    c_time = time.time()    
+
+    try:
+        await client.send_video(
+            chat_id=message.chat.id,
+            video=file_loc,
+            thumb=thumb,
+            width=width,
+            height=height,
+            duration=duration,
+            caption=title,
+            progress=progress_func,  # Ensure you have a progress_func defined elsewhere in your code
+            progress_args=(
+                "**Uploading video...**",
+                msg,
+                c_time
+            )
+        )
+    except Exception as e:
+        print(e)
+        await msg.edit_text("**Some Error Occurred. See Logs for More Info.**")
+        return
+
+    await msg.delete()
+    await clean_up(file_loc)
+
 @Client.on_message(filters.command("remove_audio"))
 async def handle_remove_audio(client, message):
     if not message.reply_to_message or not (message.reply_to_message.video or message.reply_to_message.document):
@@ -79,17 +133,7 @@ async def handle_remove_audio(client, message):
     success = await loop.run_in_executor(executor, remove_audio, file_path, output_file_no_audio)
 
     if success:
-        details = await get_video_details(output_file_no_audio)
-        if details:
-            duration = details.get('duration', 'Unknown')
-            size = details.get('size', 'Unknown')
-            size_mb = round(int(size) / (1024 * 1024), 2)
-            duration_sec = round(float(duration))
-            caption = f"Here's your cleaned video file. Duration: {duration_sec} seconds. Size: {size_mb} MB"
-        else:
-            caption = "Here's your cleaned video file."
-
-        await client.send_video(chat_id=message.chat.id, video=output_file_no_audio, caption=caption)
+        await upload_video(client, message, output_file_no_audio)
         await message.reply_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
@@ -123,17 +167,7 @@ async def handle_trim_video(client, message):
     success = future.result()
 
     if success:
-        details = await get_video_details(output_file_trimmed)
-        if details:
-            duration = details.get('duration', 'Unknown')
-            size = details.get('size', 'Unknown')
-            size_mb = round(int(size) / (1024 * 1024), 2)
-            duration_sec = round(float(duration))
-            caption = f"Here's your trimmed video file. Duration: {duration_sec} seconds. Size: {size_mb} MB"
-        else:
-            caption = "Here's your trimmed video file."
-
-        await client.send_video(chat_id=message.chat.id, video=output_file_trimmed, caption=caption)
+        await upload_video(client, message, output_file_trimmed)
         await message.reply_text("Upload complete.")
     else:
         await message.reply_text("Failed to process the video. Please try again later.")
