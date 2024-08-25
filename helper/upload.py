@@ -84,4 +84,56 @@ async def upload_subtitle(client, message, file_loc):
         return
 
     await msg.delete()
-    await clean_up(file_loc)        
+    await clean_up(file_loc)
+    
+
+async def upload_video(client, message, file_loc):
+
+    msg = await message.edit_text(
+        text="**Uploading video...**",
+        reply_markup=InlineKeyboardMarkup(
+            [[InlineKeyboardButton(text="Progress", callback_data="progress_msg")]])
+    )
+
+    thumb = None
+    duration = 0
+    width = 0
+    height = 0
+    title = None
+
+    metadata = extractMetadata(createParser(file_loc))
+    if metadata:
+        if metadata.has("duration"):
+            duration = metadata.get("duration").seconds
+        if metadata.has("width"):
+            width = metadata.get("width")
+        if metadata.has("height"):
+            height = metadata.get("height")
+        if metadata.has("title"):
+            title = metadata.get("title")
+
+    c_time = time.time()    
+
+    try:
+        await client.send_video(
+            chat_id=message.chat.id,
+            video=file_loc,
+            thumb=thumb,
+            width=width,
+            height=height,
+            duration=duration,
+            caption=title,
+            progress=progress_func,
+            progress_args=(
+                "**Uploading video...**",
+                msg,
+                c_time
+            )
+        )
+    except Exception as e:
+        print(e)
+        await msg.edit_text("**Some Error Occurred. See Logs for More Info.**")
+        return
+
+    await msg.delete()
+    await clean_up(file_loc)
