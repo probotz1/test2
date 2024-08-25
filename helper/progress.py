@@ -1,7 +1,6 @@
 import os
 import time
 
-
 PRGRS = {}
 
 async def progress_func(
@@ -13,24 +12,28 @@ async def progress_func(
 ):
     now = time.time()
     diff = now - start
-    if round(diff % 5.00) == 0 or current == total:
+    
+    # Updating progress every 5 seconds or at completion
+    if round(diff % 5) == 0 or current == total:
         percentage = current * 100 / total
         speed = current / diff
         elapsed_time = round(diff) * 1000
         time_to_completion = round((total - current) / speed) * 1000
         estimated_total_time = elapsed_time + time_to_completion
 
-        elapsed_time = TimeFormatter(milliseconds=elapsed_time)
-        estimated_total_time = TimeFormatter(milliseconds=estimated_total_time)
+        elapsed_time_str = TimeFormatter(milliseconds=elapsed_time)
+        estimated_total_time_str = TimeFormatter(milliseconds=estimated_total_time)
 
         PRGRS[f"{message.chat.id}_{message.id}"] = {
             "current": humanbytes(current),
             "total": humanbytes(total),
             "speed": humanbytes(speed),
             "progress": percentage,
-            "eta": elapsed_time
+            "eta": estimated_total_time_str
         }
 
+        # You can also log or send this progress update somewhere
+        print(f"Progress: {percentage:.2f}%, {humanbytes(current)} of {humanbytes(total)} at {humanbytes(speed)}/s, ETA: {estimated_total_time_str}")
 
 def humanbytes(size):
     if not size:
@@ -43,15 +46,17 @@ def humanbytes(size):
         n += 1
     return str(round(size, 2)) + " " + Dic_powerN[n] + 'B'
 
-
 def TimeFormatter(milliseconds: int) -> str:
     seconds, milliseconds = divmod(int(milliseconds), 1000)
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
+    
     tmp = ((str(days) + "d, ") if days else "") + \
-        ((str(hours) + "h, ") if hours else "") + \
-        ((str(minutes) + "m, ") if minutes else "") + \
-        ((str(seconds) + "s, ") if seconds else "") + \
-        ((str(milliseconds) + "ms, ") if milliseconds else "")
-    return tmp[:-2]
+          ((str(hours) + "h, ") if hours else "") + \
+          ((str(minutes) + "m, ") if minutes else "") + \
+          ((str(seconds) + "s, ") if seconds else "") + \
+          ((str(milliseconds) + "ms") if milliseconds else "")
+    
+    return tmp.rstrip(", ")
+
