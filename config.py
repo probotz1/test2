@@ -2,10 +2,10 @@ import os, time
 
 class Config(object):
     #Audio-_edit_bot client Config 
-    API_ID = os.getenv("API_ID", "")
-    API_HASH = os.getenv("API_HASH", "")
-    BOT_TOKEN = os.getenv("BOT_TOKEN", "")
-    AUTH_USERS = set(int(x) for x in os.environ.get("AUTH_USERS", "").split())
+    API_ID = os.getenv("API_ID", "28015531")
+    API_HASH = os.getenv("API_HASH", "2ab4ba37fd5d9ebf1353328fc915ad28")
+    BOT_TOKEN = os.getenv("BOT_TOKEN", "7321073695:AAE2ZvYJg6_dQNhEvznmRCSsKMoNHoQWnuI")
+    AUTH_USERS = set(int(x) for x in os.environ.get("AUTH_USERS", "6676762606").split())
 
 
     #port to run web server
