@@ -16,7 +16,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from hachoir.parser import createParser
 from hachoir.metadata import extractMetadata
 from helper.progress import progress_func
-
+from helper.tools import clean_up
 app = Flask(__name__)
 
 # Thread pool for async processing
